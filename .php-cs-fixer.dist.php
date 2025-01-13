@@ -12,7 +12,6 @@ $finder = Finder::create()
         __DIR__ . '/src',
         __DIR__ . '/spec',
     ])
-    ->notName('#Foobar.php$#')
     ->append([
         __FILE__,
     ]);
@@ -31,8 +30,8 @@ $options = [
 ];
 
 return Factory::create(new Blitz(), $overrides, $options)->forLibrary(
-    ':vendor_slug/:package_slug"',
-    ':author_name',
-    'author@domain.com',
+    'blitz-php/tasks"',
+    'Dimitri Sitchet Tomkeu',
+    'devcode.dst@gmail.com',
     date('Y')
 );

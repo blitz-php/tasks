@@ -1,16 +1,16 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "blitz-php/tasks",
+    "description": "Planificateur de tâches pour BlitzPHP",
     "keywords": [
-        ":vendor_name",
-        ":package_slug"
+        "blitz-php",
+        "tasks"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/blitz-php/tasks",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Dimitri Sitchet Tomkeu",
+            "email": "devcode.dst@gmail.com",
             "role": "Developer"
         }
     ],
@@ -18,22 +18,23 @@
         "php": "^8.1"
     },
     "require-dev": {
-        :require_dev_testing,
-        :require_dev_codestyle
+        "kahlan/kahlan": "^5.2",
+        "blitz-php/coding-standard": "^1.4"
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src"
+            "BlitzPHP\\Tasks\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Spec\\": "spec"
+            "BlitzPHP\\Tasks\\Spec\\": "spec"
         }
     },
     "scripts": {
-        :scripts_testing,
-        :scripts_codestyle,
+        "test": "vendor/bin/kahlan",
+        "test:cov": "vendor/bin/kahlan --coverage=3 --reporter=verbose --clover=clover.xml",
+        "format": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --allow-risky=yes",
 		"analyze": [
             "Composer\\Config::disableProcessTimeout",
             "bash -c \"XDEBUG_MODE=off phpstan analyse\""
@@ -47,7 +48,6 @@
     "config": {
         "sort-packages": true,
         "allow-plugins": {
-            :plugins_testing,
             "phpstan/extension-installer": true
         }
     },
