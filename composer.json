@@ -3,10 +3,12 @@
     "description": "Planificateur de tâches pour BlitzPHP",
     "keywords": [
         "blitz-php",
-        "tasks"
+        "tasks",
+		"cron"
     ],
     "homepage": "https://github.com/blitz-php/tasks",
     "license": "MIT",
+    "type": "library",
     "authors": [
         {
             "name": "Dimitri Sitchet Tomkeu",
@@ -15,11 +17,13 @@
         }
     ],
     "require": {
-        "php": "^8.1"
+        "php": "^8.1",
+        "ext-json": "*"
     },
     "require-dev": {
-        "kahlan/kahlan": "^5.2",
-        "blitz-php/coding-standard": "^1.4"
+        "blitz-php/coding-standard": "^1.4",
+        "blitz-php/framework": "^0.11.3",
+        "kahlan/kahlan": "^6.0"
     },
     "autoload": {
         "psr-4": {
