@@ -33,9 +33,7 @@ class Enable extends TaskCommand
      */
     public function execute(array $params)
     {
-        helper('preference');
-
-        preference('tasks.enabled', true);
+        parametre('tasks.enabled', true);
 
         $this->writer->ok('Les tâches ont été activées.');
     }

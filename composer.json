@@ -18,7 +18,8 @@
     ],
     "require": {
         "php": "^8.1",
-        "ext-json": "*"
+        "ext-json": "*",
+        "blitz-php/parametres": "^1.0"
     },
     "require-dev": {
         "blitz-php/coding-standard": "^1.4",
@@ -35,13 +36,19 @@
             "BlitzPHP\\Tasks\\Spec\\": "spec"
         }
     },
-    "scripts": {
-        "test": "vendor/bin/kahlan",
-        "test:cov": "vendor/bin/kahlan --coverage=3 --reporter=verbose --clover=clover.xml",
-        "format": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --allow-risky=yes",
-		"analyze": [
+	"scripts": {
+       "analyze": [
             "Composer\\Config::disableProcessTimeout",
             "bash -c \"XDEBUG_MODE=off phpstan analyse\""
+        ],
+        "test": "vendor/bin/kahlan",
+        "test:cov": [
+			"Composer\\Config::disableProcessTimeout",
+			"vendor/bin/kahlan --coverage=4 --reporter=verbose --clover=clover.xml"
+		],
+        "format": [
+            "Composer\\Config::disableProcessTimeout",
+            "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --allow-risky=yes"
         ]
     },
     "scripts-descriptions": {

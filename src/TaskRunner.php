@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace BlitzPHP\Tasks;
 
+use Ahc\Cli\Output\Writer;
 use BlitzPHP\Utilities\Date;
 use Throwable;
 
@@ -30,9 +31,13 @@ class TaskRunner
      */
     protected array $only = [];
 
+	/**
+     * Instance de la sortie de la console
+     */
+	protected static Writer $writter;
+
     public function __construct()
     {
-        helper('preference');
         $this->scheduler = service('scheduler');
     }
 
@@ -124,7 +129,14 @@ class TaskRunner
             return;
         }
 
-        CLI::write('[' . date('Y-m-d H:i:s') . '] ' . $text, $foreground);
+		if (static::$writter === null) {
+            static::$writter = new Writer();
+        }
+
+		static::$writter->write(
+			text: static::$writter->colorizer()->line('[' . date('Y-m-d H:i:s') . '] ' . $text, ['fg' => $foreground]),
+			eol: true,
+		);
     }
 
     /**
@@ -132,7 +144,7 @@ class TaskRunner
      */
     protected function updateLogs(TaskLog $taskLog)
     {
-        if (preference('tasks.logPerformance') === false) {
+        if (parametre('tasks.log_performance') === false) {
             return;
         }
 
@@ -148,15 +160,15 @@ class TaskRunner
             'error'    => serialize($taskLog->error ?? null),
         ];
 
-        // Obtenir les journaux existants
-        $logs = preference("tasks.log-{$name}");
+        // Obtenir les logs existants
+        $logs = parametre("tasks.log-{$name}");
         if (empty($logs)) {
             $logs = [];
         }
 
         // Assurez-vous que nous avons de la place pour un de plus
         /** @var int $maxLogsPerTask */
-        $maxLogsPerTask = preference('tasks.max_logs_per_task');
+        $maxLogsPerTask = parametre('tasks.max_logs_per_task');
         if ((is_countable($logs) ? count($logs) : 0) > $maxLogsPerTask) {
             array_pop($logs);
         }
@@ -164,6 +176,6 @@ class TaskRunner
         // Add the log to the top of the array
         array_unshift($logs, $data);
 
-        preference("tasks.log-{$name}", $logs);
+        parametre("tasks.log-{$name}", $logs);
     }
 }

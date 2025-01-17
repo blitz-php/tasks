@@ -33,9 +33,7 @@ class Disable extends TaskCommand
      */
     public function execute(array $params)
     {
-        helper('preference');
-
-        preference('tasks.enabled', false);
+        parametre('tasks.enabled', false);
 
         $this->writer->error('Les tâches ont été désactivées.');
     }

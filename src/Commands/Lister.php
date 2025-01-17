@@ -39,7 +39,7 @@ class Lister extends TaskCommand
     {
         helper('preference');
 
-        if (preference('tasks.enabled') === false) {
+        if (parametre('tasks.enabled') === false) {
             $this->writer->error('WARNING: L\'exécution de la tâche est actuellement désactivée.', true);
             $this->writer->write("Pour réactiver les tâches, exécutez\u{a0}: `tasks:enable`", true);
             $this->newLine();

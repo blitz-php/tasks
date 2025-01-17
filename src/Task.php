@@ -167,13 +167,12 @@ class Task
      */
     public function lastRun()
     {
-        helper('preference');
-        if (preference('tasks.log_performance') === false) {
+        if (parametre('tasks.log_performance') === false) {
             return '--';
         }
 
         // Recupere les logs
-        $logs = preference("tasks.log-{$this->name}");
+        $logs = parametre("tasks.log-{$this->name}");
 
         if (empty($logs)) {
             return '--';
