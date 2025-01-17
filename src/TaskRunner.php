@@ -36,9 +36,9 @@ class TaskRunner
      */
 	protected static Writer $writter;
 
-    public function __construct()
+    public function __construct(?Scheduler $scheduler = null)
     {
-        $this->scheduler = service('scheduler');
+        $this->scheduler = $scheduler ?? service('scheduler');
     }
 
     /**

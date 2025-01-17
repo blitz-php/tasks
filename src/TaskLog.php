@@ -21,7 +21,7 @@ use Throwable;
  * @property ?Throwable $error
  * @property ?string    $output
  * @property Date       $runStart
- * @property Date       $task
+ * @property Task       $task
  *
  * @credit <a href="https://tasks.codeigniter.com">CodeIgniter4 - CodeIgniter\Tasks\TaskLog</a>
  */
