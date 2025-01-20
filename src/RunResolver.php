@@ -213,6 +213,6 @@ class RunResolver
             'sat' => 6,
         ];
 
-        return str_replace(array_keys($days), array_values($days), $origValue);
+        return str_replace(array_keys($days), array_map(fn($v) => (string) $v, array_values($days)), $origValue);
     }
 }

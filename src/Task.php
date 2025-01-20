@@ -24,10 +24,10 @@ use SplFileObject;
  * Représente une tâche unique qui doit être planifiée et exécutée périodiquement.
  *
  * @property mixed  $action
- * @property array  $environments
+ * @property list<string> $environments
  * @property string $name
  * @property string $type
- * @property array  $types
+ * @property list<string>  $types
  *
  * @credit <a href="https://tasks.codeigniter.com">CodeIgniter4 - CodeIgniter\Tasks\Task</a>
  */
@@ -62,6 +62,8 @@ class Task
 
     /**
      * S'il n'est pas vide, liste les environnements autorisés dans lesquels le programme peut être exécuté.
+	 *
+	 * @var list<string>
      */
     protected array $environments = [];
 
@@ -153,7 +155,7 @@ class Task
     /**
      * Limite l'exécution de cette tâche uniquement dans des environnements spécifiés.
      */
-    public function environments(...$environments): self
+    public function environments(string ...$environments): self
     {
         $this->environments = $environments;
 
@@ -209,9 +211,9 @@ class Task
     }
 
     /**
-     * Executes a shell script.
+     * Execute un script shell.
      *
-     * @return array Lines of output from exec
+     * @return list<string> Lignes de la sortie de l'execution
      */
     protected function runShell(): array
     {
@@ -225,7 +227,7 @@ class Task
      *
      * @return mixed Le resultat de la closure
      */
-    protected function runClosure()
+    protected function runClosure(): mixed
     {
         return $this->getAction()->__invoke();
     }

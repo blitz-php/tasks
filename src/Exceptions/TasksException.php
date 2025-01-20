@@ -20,12 +20,12 @@ use RuntimeException;
  */
 final class TasksException extends RuntimeException
 {
-    public static function invalidTaskType(string $type)
+    public static function invalidTaskType(string $type): self
     {
         return new self(lang('Tasks.invalidTaskType', [$type]));
     }
 
-    public static function invalidCronExpression(string $string)
+    public static function invalidCronExpression(string $string): self
     {
         return new self(lang('Tasks.invalidCronExpression', [$string]));
     }

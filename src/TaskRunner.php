@@ -28,13 +28,15 @@ class TaskRunner
     /**
      * Stocke les alias des tâches à exécuter
      * Si vide, toutes les tâches seront exécutées selon leur planification.
+	 *
+	 * @var mixed[]
      */
     protected array $only = [];
 
     /**
      * Instance de la sortie de la console
      */
-    protected static Writer $writter;
+    protected static ?Writer $writter = null;
 
     public function __construct(?Scheduler $scheduler = null)
     {
@@ -45,7 +47,7 @@ class TaskRunner
      * Point d'entrée principal pour l'exécution des tâches au sein du système.
      * Il s'occupe également de la collecte des données de sortie et de l'envoi de notifications si nécessaire.
      */
-    public function run()
+    public function run(): void
     {
         $tasks = $this->scheduler->getTasks();
 
@@ -95,8 +97,10 @@ class TaskRunner
 
     /**
      * Spécifier les tâches à exécuter
+	 *
+	 * @param mixed[] $tasks
      */
-    public function only(array $tasks = []): TaskRunner
+    public function only(array $tasks = []): self
     {
         $this->only = $tasks;
 
@@ -108,7 +112,7 @@ class TaskRunner
      * Permet de définir une heure spécifique par rapport à laquelle le test sera effectué.
      * Doit être dans un format compatible avec DateTime.
      */
-    public function withTestTime(string $time): TaskRunner
+    public function withTestTime(string $time): self
     {
         $this->testTime = $time;
 
@@ -118,7 +122,7 @@ class TaskRunner
     /**
      * Ecrire une ligne dans l'interface de ligne de commande
      */
-    protected function cliWrite(string $text, ?string $foreground = null)
+    protected function cliWrite(string $text, ?string $foreground = null): void
     {
         // Sauter l'écriture pour cli dans les tests
         if (on_test()) {
@@ -142,7 +146,7 @@ class TaskRunner
     /**
      * Ajoute le journal des performances
      */
-    protected function updateLogs(TaskLog $taskLog)
+    protected function updateLogs(TaskLog $taskLog): void
     {
         if (parametre('tasks.log_performance') === false) {
             return;

@@ -33,7 +33,9 @@ class Lister extends TaskCommand
     protected $description = 'Répertorie les tâches actuellement configurées pour être exécutées.';
 
     /**
-     * Lists upcoming tasks
+     * {@inheritDoc}
+	 *
+	 * @return void
      */
     public function execute(array $params)
     {

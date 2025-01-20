@@ -39,6 +39,8 @@ class TaskLog
 
     /**
      * Constructeur TaskLog.
+	 *
+	 * @param array<string,mixed> $data
      */
     public function __construct(array $data)
     {
@@ -61,6 +63,8 @@ class TaskLog
 
     /**
      * Getter magique.
+	 *
+	 * @return mixed
      */
     public function __get(string $key)
     {

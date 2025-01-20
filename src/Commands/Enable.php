@@ -30,6 +30,8 @@ class Enable extends TaskCommand
 
     /**
      * {@inheritDoc}
+	 *
+	 * @return void
      */
     public function execute(array $params)
     {

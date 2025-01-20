@@ -39,6 +39,8 @@ class Run extends TaskCommand
 
     /**
      * {@inheritDoc}
+	 *
+	 * @return int
      */
     public function execute(array $params)
     {

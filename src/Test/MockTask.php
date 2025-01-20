@@ -26,7 +26,7 @@ class MockTask extends Task
     /**
      * Prétend exécuter l'action de cette tâche.
      *
-     * @return array
+     * @return mixed
      *
      * @throws TasksException
      */

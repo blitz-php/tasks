@@ -35,6 +35,8 @@ trait FrequenciesTrait
 
     /**
      * Si cette option est répertoriée, elle sera limitée à l'exécution dans ces environnements uniquement.
+	 *
+	 * @var list<string>
      */
     protected $allowedEnvironments;
 
@@ -123,7 +125,7 @@ trait FrequenciesTrait
     /**
      * Fonctionne à des heures spécifiques choisies
      *
-     * @param array|int $hours
+     * @param list<int>|int $hours
      */
     public function hours($hours = []): self
     {
@@ -185,7 +187,7 @@ trait FrequenciesTrait
     /**
      * S'execute sur un nombre de minutes spécifique choisi
      *
-     * @param array|int $minutes
+     * @param list<int>|int $minutes
      */
     public function minutes($minutes = []): self
     {
@@ -201,7 +203,7 @@ trait FrequenciesTrait
     /**
      * S'execute à des jours précis
      *
-     * @param array|int $days [0 : Dimanche - 6 : Samedi]
+     * @param list<int>|int $days [0 : Dimanche - 6 : Samedi]
      */
     public function days($days): self
     {
@@ -291,7 +293,7 @@ trait FrequenciesTrait
     /**
      * S'execute à des jours précis du mois
      *
-     * @param array|int $days [1-31]
+     * @param list<int>|int $days [1-31]
      */
     public function daysOfMonth($days): self
     {
@@ -331,6 +333,8 @@ trait FrequenciesTrait
 
     /**
      * S'execute a des mois specifiques
+	 *
+	 * @param list<int> $months [1-12]
      */
     public function months(array $months = []): self
     {
@@ -435,6 +439,8 @@ trait FrequenciesTrait
 
     /**
      * Analyse une chaîne de temps (comme 04:08pm) en minutes et en heures
+	 *
+	 * @return list<string>
      */
     protected function parseTime(string $time): array
     {
