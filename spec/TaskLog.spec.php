@@ -22,26 +22,29 @@ describe('TaskLog', function () {
                 '2021-01-21 12:00:00',
                 '2021-01-21 12:00:00',
                 '0.00',
+                ['first item', 'second item'],
             ],
             [
                 '2021-01-21 12:00:00',
                 '2021-01-21 12:00:01',
                 '1.00',
+                true,
             ],
             [
                 '2021-01-21 12:00:00',
                 '2021-01-21 12:05:12',
                 '312.00',
+                null,
             ],
         ];
 
-        foreach ($data as [$start, $end, $expected]) {
+        foreach ($data as [$start, $end, $expected, $output]) {
             $start = new Date($start);
             $end   = new Date($end);
 
             $log = new TaskLog([
                 'task'     => new Task('closure', static function () {}),
-                'output'   => '',
+                'output'   => $output,
                 'runStart' => $start,
                 'runEnd'   => $end,
                 'error'    => null,
