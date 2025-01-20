@@ -1,10 +1,26 @@
-# Planificateur de tâches pour BlitzPHP
+Blitz PHP - Tasks
+==============
+### Planificateur de tâches pour BlitzPHP
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/blitz-php/tasks.svg?style=flat-square)](https://packagist.org/packages/blitz-php/tasks)
-[![Tests](https://img.shields.io/github/actions/workflow/status/blitz-php/tasks/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/blitz-php/tasks/actions/workflows/run-tests.yml)
-[![Total Downloads](https://img.shields.io/packagist/dt/blitz-php/tasks.svg?style=flat-square)](https://packagist.org/packages/blitz-php/tasks)
+[![Tests](https://github.com/blitz-php/tasks/actions/workflows/run-tests.yml/badge.svg)](https://github.com/blitz-php/tasks/actions/workflows/run-tests.yml)
+[![Code Coverage](https://scrutinizer-ci.com/g/blitz-php/tasks/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/blitz-php/tasks/?branch=main)
+[![Coding Standards](https://github.com/blitz-php/tasks/actions/workflows/test-coding-standards.yml/badge.svg)](https://github.com/blitz-php/tasks/actions/workflows/test-coding-standards.yml)
+[![Build Status](https://scrutinizer-ci.com/g/blitz-php/tasks/badges/build.png?b=main)](https://scrutinizer-ci.com/g/blitz-php/tasks/build-status/main)
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/blitz-php/tasks/badges/code-intelligence.svg?b=main)](https://scrutinizer-ci.com/code-intelligence)
+[![Quality Score](https://img.shields.io/scrutinizer/g/blitz-php/tasks.svg?style=flat-square)](https://scrutinizer-ci.com/g/blitz-php/tasks)
+[![PHPStan](https://github.com/blitz-php/tasks/actions/workflows/test-phpstan.yml/badge.svg)](https://github.com/blitz-php/tasks/actions/workflows/test-phpstan.yml)
+[![PHPStan level](https://img.shields.io/badge/PHPStan-level%206-brightgreen)](phpstan.neon.dist)
 
-C'est là que devrait aller votre description. Essayez de le limiter à un paragraphe ou deux. Pensez à ajouter un petit exemple.
+[![Total Downloads](https://poser.pugx.org/blitz-php/tasks/downloads)](https://packagist.org/packages/blitz-php/tasks)
+[![Latest Version](https://img.shields.io/packagist/v/blitz-php/tasks.svg?style=flat-square)](https://packagist.org/packages/blitz-php/tasks)
+![PHP](https://img.shields.io/badge/PHP-%5E8.1-blue)
+![BlitzPHP](https://img.shields.io/badge/BlitzPHP-%5E0.11.3-yellow)
+[![Software License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+<br>
+
+Introduction
+------------
 
 ## Installation
 
@@ -14,36 +30,57 @@ Vous pouvez installer le package via composer :
 composer require blitz-php/tasks
 ```
 
-## Utilisation
+## Configuration
 
-```php
-$skeleton = new BlitzPHP\\Tasks\Tasks();
-echo $skeleton->echoPhrase('Hello, BlitzPHP\\Tasks!');
-```
+Publier le fichier de configuration : 
 
-## Test
+```php 
+php klinge publish
+``` 
 
-```bash
-composer test
-```
+## Définition des tâches 
 
-## Journal des modifications
+Définissez vos tâches dans la fonction de la clé `init()` :
 
-Veuillez consulter [CHANGELOG](CHANGELOG.md) pour plus d'informations sur ce qui a changé récemment.
+```php 
+// app/Config/tasks.php
 
-## Contribuant
+<?php 
 
-Veuillez consulter [CONTRIBUTING](CONTRIBUTING.md) pour plus de détails.
+use BlitzPHP\Tasks\Scheduler;
 
-## Failles de sécurité
+return [
+    // ...
+	// ...
 
-Veuillez consulter [notre politique de sécurité](../../security/policy) pour savoir comment signaler les vulnérabilités de sécurité.
+    /**
+     * Enregistrez toutes les tâches dans cette méthode pour l'application.
+     */
+    'init' => function (Scheduler $schedule) {
+        $schedule->command('demo:refresh --all')->mondays('11:00 pm');
+    },
+];
+
+``` 
+
+## Documentation 
+
+Lire la documentation complète : http://blitz-php.byethost14.com 
+
+## Contribuer 
+
+Nous acceptons et encourageons les contributions de la communauté sous n'importe quelle forme. Peu importe que vous sachiez coder, écrire de la documentation ou aider à trouver des bogues, toutes les contributions sont les bienvenues. 
+
+Veuillez consulter [CONTRIBUTING.md](CONTRIBUTING.md) pour plus de détails.
 
 ## Credits
 
-- [Dimitri Sitchet Tomkeu](https://github.com/blitz-php)
+Ce package est une réadaptation du package <a href="https://github.com/codeigniter4/tasks" target="_blank">CodeIgniter/Tasks</a> pour pouvoir avoir le même fonctionnement avec BlitzPHP. De ce fait tout le mérite revient à <a href="https://github.com/codeigniter4/tasks/graphs/contributors" target="_blank">tous les contributeurs de ce projet</a> que nous remercions sincerement pour ce qu'ils font pour l'évolution du développement web
+
+Pour la réadaptation, nous disons merci à : 
+- [Dimitri Sitchet Tomkeu](http://github.com/dimtrovich)
 - [Tous les Contributeurs](../../contributors)
 
 ## Licence
 
-La licence MIT (MIT). Veuillez consulter [Fichier de licence] (LICENSE.md) pour plus d'informations.
+**tasks** est un package open source publié sous licence MIT. Veuillez consulter [le fichier de licence](LICENSE.md) pour plus d'informations.
