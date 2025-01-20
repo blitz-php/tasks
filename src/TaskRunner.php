@@ -28,8 +28,8 @@ class TaskRunner
     /**
      * Stocke les alias des tâches à exécuter
      * Si vide, toutes les tâches seront exécutées selon leur planification.
-	 *
-	 * @var mixed[]
+     *
+     * @var list<mixed>
      */
     protected array $only = [];
 
@@ -97,8 +97,8 @@ class TaskRunner
 
     /**
      * Spécifier les tâches à exécuter
-	 *
-	 * @param mixed[] $tasks
+     *
+     * @param list<mixed> $tasks
      */
     public function only(array $tasks = []): self
     {

@@ -23,11 +23,11 @@ use SplFileObject;
 /**
  * Représente une tâche unique qui doit être planifiée et exécutée périodiquement.
  *
- * @property mixed  $action
+ * @property mixed        $action
  * @property list<string> $environments
- * @property string $name
- * @property string $type
- * @property list<string>  $types
+ * @property string       $name
+ * @property string       $type
+ * @property list<string> $types
  *
  * @credit <a href="https://tasks.codeigniter.com">CodeIgniter4 - CodeIgniter\Tasks\Task</a>
  */
@@ -62,8 +62,8 @@ class Task
 
     /**
      * S'il n'est pas vide, liste les environnements autorisés dans lesquels le programme peut être exécuté.
-	 *
-	 * @var list<string>
+     *
+     * @var list<string>
      */
     protected array $environments = [];
 

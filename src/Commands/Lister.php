@@ -34,8 +34,8 @@ class Lister extends TaskCommand
 
     /**
      * {@inheritDoc}
-	 *
-	 * @return void
+     *
+     * @return void
      */
     public function execute(array $params)
     {

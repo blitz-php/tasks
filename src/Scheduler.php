@@ -20,9 +20,9 @@ use Closure;
  */
 class Scheduler
 {
-	/**
-	 * @var list<Task>
-	 */
+    /**
+     * @var list<Task>
+     */
     protected array $tasks = [];
 
     /**
