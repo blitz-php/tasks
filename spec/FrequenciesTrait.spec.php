@@ -13,19 +13,19 @@ use BlitzPHP\Tasks\FrequenciesTrait;
 
 use function Kahlan\expect;
 
-describe('FrequenciesTrait', function() {
-	beforeAll(function() {
-		$this->assertSame = function($expected, $actual) {
-			expect($expected)->toBe($actual);
-		};
-	});
-    beforeEach(function() {
-		$this->class = new class () {
+describe('FrequenciesTrait', function () {
+    beforeAll(function () {
+        $this->assertSame = function ($expected, $actual) {
+            expect($expected)->toBe($actual);
+        };
+    });
+    beforeEach(function () {
+        $this->class = new class () {
             use FrequenciesTrait;
         };
-	});
+    });
 
-    it('testSetCron', function() {
+    it('testSetCron', function () {
         $cron = '5 10 11 12 6';
 
         $this->class->cron($cron);
@@ -33,19 +33,19 @@ describe('FrequenciesTrait', function() {
         expect($cron)->toBe($this->class->getExpression());
     });
 
-    it('testDaily', function() {
+    it('testDaily', function () {
         $this->class->daily();
 
         expect('0 0 * * *')->toBe($this->class->getExpression());
     });
 
-    it('testDailyWithTime', function() {
+    it('testDailyWithTime', function () {
         $this->class->daily('4:08 pm');
 
         expect('08 16 * * *')->toBe($this->class->getExpression());
     });
 
-    it('testTime', function() {
+    it('testTime', function () {
         $this->class->time('4:08 pm');
 
         expect('08 16 * * *')->toBe($this->class->getExpression());
@@ -75,7 +75,7 @@ describe('FrequenciesTrait', function() {
         expect('*/15 * * * *')->toBe($this->class->getExpression());
     });
 
-	it('testEveryThirtyMinutes', function () {
+    it('testEveryThirtyMinutes', function () {
         $this->class->everyThirtyMinutes();
 
         expect('*/30 * * * *')->toBe($this->class->getExpression());
@@ -123,13 +123,13 @@ describe('FrequenciesTrait', function() {
         expect('* * * * 3')->toBe($this->class->getExpression());
     });
 
-    it('testEveryWednesdayWithTime', function() {
+    it('testEveryWednesdayWithTime', function () {
         $this->class->wednesdays('4:08 pm');
 
         expect('08 16 * * 3')->toBe($this->class->getExpression());
     });
 
-	it('testEveryThursday', function () {
+    it('testEveryThursday', function () {
         $this->class->thursdays();
 
         $this->assertSame('* * * * 4', $this->class->getExpression());
@@ -165,7 +165,7 @@ describe('FrequenciesTrait', function() {
         $this->assertSame('08 16 * * 6', $this->class->getExpression());
     });
 
-	it('testMonthly', function () {
+    it('testMonthly', function () {
         $this->class->monthly();
 
         $this->assertSame('0 0 1 * *', $this->class->getExpression());
@@ -201,7 +201,7 @@ describe('FrequenciesTrait', function() {
         $this->assertSame('08 16 1 */3 *', $this->class->getExpression());
     });
 
-	it('testWeekdays', function () {
+    it('testWeekdays', function () {
         $this->class->weekdays();
 
         $this->assertSame('0 0 * * 1-5', $this->class->getExpression());
@@ -243,7 +243,7 @@ describe('FrequenciesTrait', function() {
         $this->assertSame('15 */3 * * *', $this->class->getExpression());
     });
 
-	it('testBetweenHours', function () {
+    it('testBetweenHours', function () {
         $this->class->betweenHours(10, 12);
 
         $this->assertSame('* 10-12 * * *', $this->class->getExpression());
@@ -273,19 +273,19 @@ describe('FrequenciesTrait', function() {
         $this->assertSame('* * * * *', $this->class->getExpression());
     });
 
-    it('testEveryMinuteWithParameter', function() {
+    it('testEveryMinuteWithParameter', function () {
         $this->class->everyMinute(15);
 
         $this->assertSame('*/15 * * * *', $this->class->getExpression());
     });
 
-    it('testBetweenMinutes', function() {
+    it('testBetweenMinutes', function () {
         $this->class->betweenMinutes(15, 30);
 
         $this->assertSame('15-30 * * * *', $this->class->getExpression());
     });
 
-	it('testMinutes', function () {
+    it('testMinutes', function () {
         $this->class->minutes([0, 10, 30]);
 
         $this->assertSame('0,10,30 * * * *', $this->class->getExpression());

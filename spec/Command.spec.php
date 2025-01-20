@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of BlitzPHP Parametres.
+ * This file is part of BlitzPHP Tasks.
  *
  * (c) 2025 Dimitri Sitchet Tomkeu <devcode.dst@gmail.com>
  *
@@ -12,15 +12,15 @@
 use function Kahlan\expect;
 
 describe('Task / Command', function () {
-	it('Les commandes `tasks:disable` et `tasks:enable` fonctionnent', function () {
-		expect(parametre('tasks.enabled'))->toBeNull();
+    it('Les commandes `tasks:disable` et `tasks:enable` fonctionnent', function () {
+        expect(parametre('tasks.enabled'))->toBeNull();
 
-		command('tasks:disable');
-		expect(parametre('tasks.enabled'))->toBeFalsy();
+        command('tasks:disable');
+        expect(parametre('tasks.enabled'))->toBeFalsy();
 
-		command('tasks:enable');
-		expect(parametre('tasks.enabled'))->toBeTruthy();
-	});
+        command('tasks:enable');
+        expect(parametre('tasks.enabled'))->toBeTruthy();
+    });
 
     it('Publisher', function () {
         config()->ghost('publisher')->set('publisher.restrictions', [ROOTPATH => '*']);

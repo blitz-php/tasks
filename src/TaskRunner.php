@@ -31,10 +31,10 @@ class TaskRunner
      */
     protected array $only = [];
 
-	/**
+    /**
      * Instance de la sortie de la console
      */
-	protected static Writer $writter;
+    protected static Writer $writter;
 
     public function __construct(?Scheduler $scheduler = null)
     {
@@ -129,14 +129,14 @@ class TaskRunner
             return;
         }
 
-		if (static::$writter === null) {
+        if (static::$writter === null) {
             static::$writter = new Writer();
         }
 
-		static::$writter->write(
-			text: static::$writter->colorizer()->line('[' . date('Y-m-d H:i:s') . '] ' . $text, ['fg' => $foreground]),
-			eol: true,
-		);
+        static::$writter->write(
+            text: static::$writter->colorizer()->line('[' . date('Y-m-d H:i:s') . '] ' . $text, ['fg' => $foreground]),
+            eol: true,
+        );
     }
 
     /**

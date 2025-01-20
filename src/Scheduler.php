@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 /**
- * This file is part of CodeIgniter Tasks.
+ * This file is part of BlitzPHP Tasks.
  *
- * (c) CodeIgniter Foundation <admin@codeigniter.com>
+ * (c) 2025 Dimitri Sitchet Tomkeu <devcode.dst@gmail.com>
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
@@ -31,8 +31,6 @@ class Scheduler
     {
         return $this->tasks;
     }
-
-    // --------------------------------------------------------------------
 
     /**
      * Planifie l'execution d'une closure.
@@ -75,8 +73,6 @@ class Scheduler
     {
         return $this->createTask('url', $url);
     }
-
-    // --------------------------------------------------------------------
 
     /**
      * @param mixed $action

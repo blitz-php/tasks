@@ -15,17 +15,17 @@ use BlitzPHP\Tasks\TaskRunner;
 
 use function Kahlan\expect;
 
-describe("TaskRunner", function() {
-	beforeAll(function() {
-		$this->getRunner = function(array $tasks = []) {
-			$scheduler = service('scheduler');
+describe('TaskRunner', function () {
+    beforeAll(function () {
+        $this->getRunner = function (array $tasks = []) {
+            $scheduler = service('scheduler');
 
-			ReflectionHelper::setPrivateProperty($scheduler, 'tasks', $tasks);
+            ReflectionHelper::setPrivateProperty($scheduler, 'tasks', $tasks);
 
-			return new TaskRunner($scheduler);
-		};
+            return new TaskRunner($scheduler);
+        };
 
-		$this->seeInFile = function (array $where) {
+        $this->seeInFile = function (array $where) {
             $data = json_decode(file_get_contents(storage_path('.parametres.json')), true) ?: [];
             $data = collect($data);
 
@@ -39,22 +39,22 @@ describe("TaskRunner", function() {
 
             return $data->isNotEmpty();
         };
-	});
+    });
 
-	beforeEach(function() {
-		parametre('tasks.log_performance', true);
-	});
+    beforeEach(function () {
+        parametre('tasks.log_performance', true);
+    });
 
-	afterAll(function() {
-		@unlink(storage_path('.parametres.json'));
-	});
+    afterAll(function () {
+        @unlink(storage_path('.parametres.json'));
+    });
 
-	it("S'execute avec aucune tache", function () {
-		expect($this->getRunner()->run())->toBeNull();
-	});
+    it("S'execute avec aucune tache", function () {
+        expect($this->getRunner()->run())->toBeNull();
+    });
 
-	it("S'execute normalement avec succes", function () {
-		$task1 = (new Task('closure', static function () {
+    it("S'execute normalement avec succes", function () {
+        $task1 = (new Task('closure', static function () {
             echo 'Task 1';
         }))->daily('12:05am')->named('task1');
 
@@ -69,7 +69,7 @@ describe("TaskRunner", function() {
         $output = ob_get_clean();
 
         // Seulement la tache 2 doit avoir été exécutée
-       expect($output)->toBe('Task 2');
+        expect($output)->toBe('Task 2');
 
         // doit avoir les stats de log
         $expected = [
@@ -84,13 +84,13 @@ describe("TaskRunner", function() {
         ];
 
         expect($this->seeInFile([
-            'file' => 'tasks',
+            'file'  => 'tasks',
             'key'   => 'log-task2',
             'value' => serialize($expected),
         ]))->toBeTruthy();
 
         expect($this->seeInFile([
-            'key'   => 'log-task1',
+            'key' => 'log-task1',
         ]))->toBeFalsy();
-	});
+    });
 });

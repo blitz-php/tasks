@@ -15,9 +15,9 @@ use BlitzPHP\Utilities\Date;
 
 use function Kahlan\expect;
 
-describe("TaskLog", function() {
-	it('Test la duree', function () {
-		$data = [
+describe('TaskLog', function () {
+    it('Test la duree', function () {
+        $data = [
             [
                 '2021-01-21 12:00:00',
                 '2021-01-21 12:00:00',
@@ -35,20 +35,20 @@ describe("TaskLog", function() {
             ],
         ];
 
-		foreach ($data as [$start, $end, $expected]) {
-			$start = new Date($start);
-        	$end   = new Date($end);
+        foreach ($data as [$start, $end, $expected]) {
+            $start = new Date($start);
+            $end   = new Date($end);
 
-			$log = new TaskLog([
-				'task'     => new Task('closure', static function () {}),
-				'output'   => '',
-				'runStart' => $start,
-				'runEnd'   => $end,
-				'error'    => null,
-			]);
+            $log = new TaskLog([
+                'task'     => new Task('closure', static function () {}),
+                'output'   => '',
+                'runStart' => $start,
+                'runEnd'   => $end,
+                'error'    => null,
+            ]);
 
-			expect($log->duration())->toBe($expected);
-			expect($log->runStart)->toBe($start);
-		}
-	});
+            expect($log->duration())->toBe($expected);
+            expect($log->runStart)->toBe($start);
+        }
+    });
 });
