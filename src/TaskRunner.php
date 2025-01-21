@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace BlitzPHP\Tasks;
 
+use Ahc\Cli\Output\Color;
 use Ahc\Cli\Output\Writer;
 use BlitzPHP\Utilities\Date;
 use Throwable;
@@ -69,14 +70,14 @@ class TaskRunner
             $start  = Date::now();
             $output = null;
 
-            $this->cliWrite('Traitement: ' . ($task->name ?: 'Task'), 'green');
+            $this->cliWrite('Traitement: ' . ($task->name ?: 'Task'), Color::GREEN);
 
             try {
                 $output = $task->run();
 
-                $this->cliWrite('Exécuté: ' . ($task->name ?: 'Task'), 'cyan');
+                $this->cliWrite('Exécuté: ' . ($task->name ?: 'Task'), Color::CYAN);
             } catch (Throwable $e) {
-                $this->cliWrite('Échoué: ' . ($task->name ?: 'Task'), 'red');
+                $this->cliWrite('Échoué: ' . ($task->name ?: 'Task'), Color::RED);
 
                 logger()->error($e->getMessage(), $e->getTrace());
                 $error = $e;
@@ -122,7 +123,7 @@ class TaskRunner
     /**
      * Ecrire une ligne dans l'interface de ligne de commande
      */
-    protected function cliWrite(string $text, ?string $foreground = null): void
+    protected function cliWrite(string $text, ?int $foreground = null): void
     {
         // Sauter l'écriture pour cli dans les tests
         if (on_test()) {

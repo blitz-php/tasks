@@ -68,9 +68,11 @@ class Task
     protected array $environments = [];
 
     /**
-     * L'alias par lequel cette tâche peut être exécutée
+     * Proprietés magiques emulées
+     *
+     * @var array<string,mixed>
      */
-    protected string $name;
+    protected array $attributes = [];
 
     /**
      * @param mixed $action
@@ -92,7 +94,7 @@ class Task
      */
     public function named(string $name): self
     {
-        $this->name = $name;
+        $this->attributes['name'] = $name;
 
         return $this;
     }
@@ -295,12 +297,22 @@ class Task
      */
     public function __get(string $key)
     {
-        if ($key === 'name' && empty($this->name)) {
+        if ($key === 'name' && empty($this->attributes['name'])) {
             return $this->buildName();
         }
 
         if (property_exists($this, $key)) {
             return $this->{$key};
         }
+
+        return $this->attributes[$key] ?? null;
+    }
+
+    /**
+     * Setter magique
+     */
+    public function __set(string $name, mixed $value): void
+    {
+        $this->attributes[$name] = $value;
     }
 }

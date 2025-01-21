@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace BlitzPHP\Tasks\Commands;
 
+use BlitzPHP\Tasks\Task;
 use BlitzPHP\Tasks\TaskRunner;
 
 /**
@@ -29,7 +30,7 @@ class Run extends TaskCommand
      * {@inheritDoc}
      */
     protected $options = [
-        '--task' => 'Run specific task by alias.',
+        '--task' => 'Exécuter une tâche spécifique par son alias.',
     ];
 
     /**
@@ -50,18 +51,31 @@ class Run extends TaskCommand
             $this->newLine();
         }
 
-        $this->task('Exécution de tâches...');
+        $this->task('Exécution de tâches...')->eol();
 
-        call_user_func(config('tasks.init'), service('scheduler'));
+        call_user_func(config('tasks.init'), $scheduler = service('scheduler'));
 
-        $runner = new TaskRunner();
+        $only = $this->option('task');
 
-        if ($task = $this->option('task')) {
-            $runner->only([$task]);
+        $tasks = collect($scheduler->getTasks())
+            ->filter(fn (Task $task) => $task->shouldRun())
+            ->filter(fn (Task $task) => $only === null ? true : $task->name === $only);
+
+        if ($tasks->isEmpty()) {
+            $this->writer->error('Aucune tâche à exécuter.');
+
+            return EXIT_ERROR;
+        }
+
+        $runner = new TaskRunner($scheduler);
+
+        if ($only) {
+            $runner->only([$only]);
         }
 
         $runner->run();
 
+        $this->eol()->border();
         $this->writer->ok('Tâches en cours d\'exécution terminées');
 
         return EXIT_SUCCESS;
