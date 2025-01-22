@@ -9,6 +9,7 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+use BlitzPHP\Container\Container;
 use BlitzPHP\Tasks\Scheduler;
 use BlitzPHP\Tasks\Task;
 
@@ -28,6 +29,54 @@ describe('Scheduler', function () {
         expect($task)->toBeAnInstanceOf(Task::class);
         expect($function)->toBe($task->getAction());
         expect('Hello')->toBe($task->getAction()());
+    });
+
+    it('Peut sauvegarder un callable', function () {
+        $class = new class () {
+            public function execute()
+            {
+                return 'Hello';
+            }
+        };
+
+        $task = $this->scheduler->call([$class, 'execute']);
+
+        expect($task)->toBeAnInstanceOf(Task::class);
+        expect('Hello')->toBe($task->getAction()());
+    });
+
+    it('Peut sauvegarder une classe invokable', function () {
+        $class = new class () {
+            public function __invoke()
+            {
+                return 'Hello';
+            }
+        };
+
+        $task = $this->scheduler->call($class);
+
+        expect($task)->toBeAnInstanceOf(Task::class);
+        expect('Hello')->toBe($task->getAction()());
+    });
+
+    it("Peut faire de l'injection de dependance dans un callable", function () {
+        $class = new class () {
+            public function __invoke(Container $container)
+            {
+                $container->set('foo', 'bar');
+
+                return $container;
+            }
+        };
+
+        $task = $this->scheduler->call($class);
+
+        expect($task)->toBeAnInstanceOf(Task::class);
+
+        $container = $task->run();
+
+        expect($container)->toBeAnInstanceOf(Container::class);
+        expect($container->get('foo'))->toBe('bar');
     });
 
     it('Peut sauvegarder une commande klinge', function () {

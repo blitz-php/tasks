@@ -38,7 +38,7 @@ class Scheduler
     /**
      * Planifie l'execution d'une closure.
      */
-    public function call(Closure $func): Task
+    public function call(callable $func): Task
     {
         return $this->createTask('closure', $func);
     }
