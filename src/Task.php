@@ -231,7 +231,7 @@ class Task
      */
     protected function runClosure(): mixed
     {
-        return $this->getAction()->__invoke();
+        return service('container')->call($this->getAction());
     }
 
     /**
