@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace BlitzPHP\Tasks;
 
+use BlitzPHP\Contracts\Container\ContainerInterface;
 use BlitzPHP\Tasks\Exceptions\TasksException;
 use BlitzPHP\Utilities\Date;
 use InvalidArgumentException;
@@ -67,6 +68,8 @@ class Task
      */
     protected array $attributes = [];
 
+	protected ContainerInterface $container;
+
     /**
      * @param string $type  Type de l'action en cours.
 	 * @param mixed $action Le contenu actuel qu'on souhaite executer.
@@ -78,6 +81,8 @@ class Task
         if (! in_array($type, $this->types, true)) {
             throw TasksException::invalidTaskType($type);
         }
+
+		$this->container = service('container');
     }
 
     /**
@@ -105,14 +110,6 @@ class Task
     {
         return $this->action;
     }
-
-	/**
-     * Renvoie les paramètres de la tâche.
-     */
-	public function getParameters(): array
-	{
-		return $this->parameters;
-	}
 
     /**
      * Exécute l'action de cette tâche.
@@ -241,7 +238,7 @@ class Task
      */
     protected function runClosure(): mixed
     {
-        return service('container')->call($this->getAction());
+        return $this->container->call($this->getAction(), $this->parameters);
     }
 
     /**
