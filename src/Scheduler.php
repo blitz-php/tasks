@@ -13,13 +13,25 @@ declare(strict_types=1);
 
 namespace BlitzPHP\Tasks;
 
-use Closure;
-
 /**
  * @credit <a href="https://tasks.codeigniter.com">CodeIgniter4 - CodeIgniter\Tasks\Scheduler</a>
  */
 class Scheduler
 {
+	const SUNDAY = 0;
+
+    const MONDAY = 1;
+
+    const TUESDAY = 2;
+
+    const WEDNESDAY = 3;
+
+    const THURSDAY = 4;
+
+    const FRIDAY = 5;
+
+    const SATURDAY = 6;
+
     /**
      * @var list<Task>
      */
@@ -46,13 +58,13 @@ class Scheduler
     /**
      * Planifie l'execution d'une commande.
      */
-    public function command(string $command): Task
+    public function command(string $command, array $parameters = []): Task
     {
-        return $this->createTask('command', $command);
+        return $this->createTask('command', $command, $parameters);
     }
 
     /**
-     * Planifie l'exécution d'une fonction locale
+     * Planifie l'exécution d'une commande systeme
      */
     public function shell(string $command): Task
     {
@@ -80,9 +92,9 @@ class Scheduler
     /**
      * @param mixed $action
      */
-    protected function createTask(string $type, $action): Task
+    protected function createTask(string $type, $action, array $parameters = []): Task
     {
-        $task          = new Task($type, $action);
+        $task          = new Task($type, $action, $parameters);
         $this->tasks[] = $task;
 
         return $task;

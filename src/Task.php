@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace BlitzPHP\Tasks;
 
+use BlitzPHP\Contracts\Container\ContainerInterface;
 use BlitzPHP\Tasks\Exceptions\TasksException;
 use BlitzPHP\Utilities\Date;
 use InvalidArgumentException;
@@ -49,23 +50,16 @@ class Task
     ];
 
     /**
-     * Type de l'action en cours.
-     */
-    protected string $type;
-
-    /**
-     * Le contenu actuel qu'on souhaite executer.
-     *
-     * @var mixed
-     */
-    protected $action;
-
-    /**
      * S'il n'est pas vide, liste les environnements autorisés dans lesquels le programme peut être exécuté.
      *
      * @var list<string>
      */
     protected array $environments = [];
+
+	/**
+     * Timezone dans lequel la tâche doit être traitée.
+     */
+    protected ?string $timezone = null;
 
     /**
      * Proprietés magiques emulées
@@ -74,19 +68,21 @@ class Task
      */
     protected array $attributes = [];
 
+	protected ContainerInterface $container;
+
     /**
-     * @param mixed $action
+     * @param string $type  Type de l'action en cours.
+	 * @param mixed $action Le contenu actuel qu'on souhaite executer.
      *
      * @throws TasksException
      */
-    public function __construct(string $type, $action)
+    public function __construct(protected string $type, protected mixed $action, protected array $parameters = [])
     {
         if (! in_array($type, $this->types, true)) {
             throw TasksException::invalidTaskType($type);
         }
 
-        $this->type   = $type;
-        $this->action = $action;
+		$this->container = service('container');
     }
 
     /**
@@ -109,10 +105,8 @@ class Task
 
     /**
      * Renvoie l'action enregistrée.
-     *
-     * @return mixed
      */
-    public function getAction()
+    public function getAction(): mixed
     {
         return $this->action;
     }
@@ -139,7 +133,7 @@ class Task
      */
     public function shouldRun(?string $testTime = null): bool
     {
-        $cron = service('cronExpression');
+        $cron = service('cronExpression')->setTimezone($this->timezone);
 
         // Autoriser le réglage des heures pendant les tests
         if (! empty($testTime)) {
@@ -164,8 +158,21 @@ class Task
         return $this;
     }
 
+	/**
+	 * Définit le fuseau horaire pour l'exécution de la tâche.
+	 *
+	 * @param string $timezone L'identifiant du fuseau horaire à utiliser pour la tâche.
+	 * 						   Il doit s'agir d'une chaîne de caractères PHP valide (par exemple, 'America/New_York', 'Europe/Paris').
+	*/
+	public function timezone(string $timezone): self
+	{
+		$this->timezone = $timezone;
+
+		return $this;
+	}
+
     /**
-     * Returns the date this was last ran.
+     * Renvoie la date à laquelle cette tâche a été exécutée pour la dernière fois.
      *
      * @return Date|string
      */
@@ -231,7 +238,7 @@ class Task
      */
     protected function runClosure(): mixed
     {
-        return service('container')->call($this->getAction());
+        return $this->container->call($this->getAction(), $this->parameters);
     }
 
     /**

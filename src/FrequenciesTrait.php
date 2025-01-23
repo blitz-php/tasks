@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace BlitzPHP\Tasks;
 
+use BlitzPHP\Utilities\Date;
+
 /**
  * Fournit les méthodes permettant d'attribuer des fréquences à des tâches individuelles.
  *
@@ -59,6 +61,14 @@ trait FrequenciesTrait
     }
 
     /**
+     * S'exécute tous les jours à l'heure indiquée
+     */
+    public function at(string $time): self
+    {
+        return $this->daily($time);
+    }
+
+	/**
      * S'exécute tous les jours à minuit, sauf si une chaîne d'heure est transmise (comme 04:08pm)
      */
     public function daily(?string $time = null): self
@@ -71,6 +81,20 @@ trait FrequenciesTrait
 
         $this->expression['min']  = $min;
         $this->expression['hour'] = $hour;
+
+        return $this;
+    }
+
+	/**
+     * S'execute entre une temps de debut et de fin
+     */
+    public function between(string $startTime, string $endTime): self
+    {
+		[$minStart, $hourStart] = array_map('intval', $this->parseTime($startTime));
+		[$minEnd, $hourEnd]     = array_map('intval', $this->parseTime($endTime));
+
+		$this->betweenHours($hourStart, $hourEnd);
+		$this->betweenMinutes($minStart, $minEnd);
 
         return $this;
     }
@@ -89,14 +113,11 @@ trait FrequenciesTrait
     }
 
     /**
-     * S'exécute au début de chaque heure ou à une minute précise.
+     * S'exécute au début de chaque heure à une minute précise.
      */
     public function hourly(?int $minute = null): self
     {
-        $this->expression['min']  = $minute ?? '00';
-        $this->expression['hour'] = '*';
-
-        return $this;
+        return $this->everyHour(1, $minute);
     }
 
     /**
@@ -108,6 +129,57 @@ trait FrequenciesTrait
     {
         $this->expression['min']  = $minute ?? '0';
         $this->expression['hour'] = ($hour === 1) ? '*' : '*/' . $hour;
+
+        return $this;
+    }
+
+	/**
+     * S'exécute toutes les 2 heures
+     *
+     * @param int|string|null $minute
+     */
+    public function everyTwoHours($minute = null): self
+    {
+        return $this->everyHour(2, $minute);
+    }
+
+	/**
+     * S'exécute toutes les 3 heures
+     *
+     * @param int|string|null $minute
+     */
+    public function everyThreeHours($minute = null): self
+    {
+        return $this->everyHour(3, $minute);
+    }
+
+	/**
+     * S'exécute toutes les 4 heures
+     *
+     * @param int|string|null $minute
+     */
+    public function everyFourHours($minute = null): self
+    {
+        return $this->everyHour(4, $minute);
+    }
+
+	/**
+     * S'exécute toutes les 6 heures
+     *
+     * @param int|string|null $minute
+     */
+    public function everySixHours($minute = null): self
+    {
+        return $this->everyHour(6, $minute);
+    }
+
+    /**
+     * S'execute toutes les heures impaires
+     */
+    public function everyOddHour($minute = null): self
+    {
+		$this->expression['min']  = $minute ?? '0';
+        $this->expression['hour'] = '1-23/2';
 
         return $this;
     }
@@ -151,11 +223,43 @@ trait FrequenciesTrait
     }
 
     /**
+     * S'execute toutes les 2 minutes
+     */
+    public function everyTwoMinutes(): self
+    {
+        return $this->everyMinute(2);
+    }
+
+    /**
+     * S'execute toutes les 3 minutes
+     */
+    public function everyThreeMinutes()
+    {
+        return $this->everyMinute(3);
+    }
+
+    /**
+     * S'execute toutes les 4 minutes
+     */
+    public function everyFourMinutes()
+    {
+        return $this->everyMinute(4);
+    }
+
+    /**
      * S'execute toutes les 5 minutes
      */
     public function everyFiveMinutes(): self
     {
         return $this->everyMinute(5);
+    }
+
+    /**
+     * S'execute toutes les 10 minutes
+     */
+    public function everyTenMinutes(): self
+    {
+		return $this->everyMinute(10);
     }
 
     /**
@@ -221,7 +325,7 @@ trait FrequenciesTrait
      */
     public function sundays(?string $time = null): self
     {
-        return $this->setDayOfWeek(0, $time);
+        return $this->setDayOfWeek(Scheduler::SUNDAY, $time);
     }
 
     /**
@@ -229,7 +333,7 @@ trait FrequenciesTrait
      */
     public function mondays(?string $time = null): self
     {
-        return $this->setDayOfWeek(1, $time);
+        return $this->setDayOfWeek(Scheduler::MONDAY, $time);
     }
 
     /**
@@ -237,7 +341,7 @@ trait FrequenciesTrait
      */
     public function tuesdays(?string $time = null): self
     {
-        return $this->setDayOfWeek(2, $time);
+        return $this->setDayOfWeek(Scheduler::TUESDAY, $time);
     }
 
     /**
@@ -245,7 +349,7 @@ trait FrequenciesTrait
      */
     public function wednesdays(?string $time = null): self
     {
-        return $this->setDayOfWeek(3, $time);
+        return $this->setDayOfWeek(Scheduler::WEDNESDAY, $time);
     }
 
     /**
@@ -253,7 +357,7 @@ trait FrequenciesTrait
      */
     public function thursdays(?string $time = null): self
     {
-        return $this->setDayOfWeek(4, $time);
+        return $this->setDayOfWeek(Scheduler::THURSDAY, $time);
     }
 
     /**
@@ -261,7 +365,7 @@ trait FrequenciesTrait
      */
     public function fridays(?string $time = null): self
     {
-        return $this->setDayOfWeek(5, $time);
+        return $this->setDayOfWeek(Scheduler::FRIDAY, $time);
     }
 
     /**
@@ -269,13 +373,23 @@ trait FrequenciesTrait
      */
     public function saturdays(?string $time = null): self
     {
-        return $this->setDayOfWeek(6, $time);
+        return $this->setDayOfWeek(Scheduler::SATURDAY, $time);
     }
 
     /**
      * Devrait être exécuté le premier jour de chaque mois.
      */
     public function monthly(?string $time = null): self
+    {
+        return $this->monthlyOn(1, $time);
+    }
+
+	/**
+     * S'execute mensuellement à un jour et une heure donnés.
+     *
+     * @param  int<1, 31>  $dayOfMonth
+     */
+    public function monthlyOn(int $dayOfMonth = 1, ?string $time = null): self
     {
         $min = $hour = 0;
 
@@ -285,7 +399,7 @@ trait FrequenciesTrait
 
         $this->expression['min']        = $min;
         $this->expression['hour']       = $hour;
-        $this->expression['dayOfMonth'] = 1;
+        $this->expression['dayOfMonth'] = $dayOfMonth;
 
         return $this;
     }
@@ -304,6 +418,16 @@ trait FrequenciesTrait
         $this->expression['dayOfMonth'] = implode(',', $days);
 
         return $this;
+    }
+
+    /**
+     * S'execute le dernier jours du mois
+     */
+    public function lastDayOfMonth(?string $time = null)
+    {
+        $this->daily($time);
+
+		return $this->daysOfMonth(Date::now()->endOfMonth()->getDay());
     }
 
     /**
@@ -349,6 +473,14 @@ trait FrequenciesTrait
      */
     public function quarterly(?string $time = null): self
     {
+        return $this->quarterlyOn(1, $time);
+    }
+
+	/**
+     * S'execute tous les trimestres à un jour et une heure donnés.
+     */
+    public function quarterlyOn(int $dayOfQuarter = 1, ?string $time = null)
+	{
         $min = $hour = 0;
 
         if (! empty($time)) {
@@ -357,7 +489,7 @@ trait FrequenciesTrait
 
         $this->expression['min']        = $min;
         $this->expression['hour']       = $hour;
-        $this->expression['dayOfMonth'] = 1;
+        $this->expression['dayOfMonth'] = $dayOfQuarter;
 
         $this->everyMonth(3);
 
@@ -369,6 +501,16 @@ trait FrequenciesTrait
      */
     public function yearly(?string $time = null): self
     {
+        return $this->yearlyOn(1, 1, $time);
+    }
+
+	/**
+     * S'execute chaque année à un mois, un jour et une heure donnés.
+     *
+     * @param  int<1, 31>  $dayOfMonth
+     */
+    public function yearlyOn(int $month = 1, int $dayOfMonth = 1, ?string $time = null): self
+    {
         $min = $hour = 0;
 
         if (! empty($time)) {
@@ -377,8 +519,8 @@ trait FrequenciesTrait
 
         $this->expression['min']        = $min;
         $this->expression['hour']       = $hour;
-        $this->expression['dayOfMonth'] = 1;
-        $this->expression['month']      = 1;
+        $this->expression['dayOfMonth'] = $dayOfMonth;
+        $this->expression['month']      = $month;
 
         return $this;
     }
