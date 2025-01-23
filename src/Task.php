@@ -73,7 +73,7 @@ class Task
      *
      * @throws TasksException
      */
-    public function __construct(protected string $type, protected mixed $action)
+    public function __construct(protected string $type, protected mixed $action, protected array $parameters = [])
     {
         if (! in_array($type, $this->types, true)) {
             throw TasksException::invalidTaskType($type);
@@ -105,6 +105,14 @@ class Task
     {
         return $this->action;
     }
+
+	/**
+     * Renvoie les paramètres de la tâche.
+     */
+	public function getParameters(): array
+	{
+		return $this->parameters;
+	}
 
     /**
      * Exécute l'action de cette tâche.

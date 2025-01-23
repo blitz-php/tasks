@@ -46,13 +46,13 @@ class Scheduler
     /**
      * Planifie l'execution d'une commande.
      */
-    public function command(string $command): Task
+    public function command(string $command, array $parameters = []): Task
     {
-        return $this->createTask('command', $command);
+        return $this->createTask('command', $command, $parameters);
     }
 
     /**
-     * Planifie l'exécution d'une fonction locale
+     * Planifie l'exécution d'une commande systeme
      */
     public function shell(string $command): Task
     {
@@ -80,9 +80,9 @@ class Scheduler
     /**
      * @param mixed $action
      */
-    protected function createTask(string $type, $action): Task
+    protected function createTask(string $type, $action, array $parameters = []): Task
     {
-        $task          = new Task($type, $action);
+        $task          = new Task($type, $action, $parameters);
         $this->tasks[] = $task;
 
         return $task;
