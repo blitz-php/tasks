@@ -13,6 +13,7 @@ use BlitzPHP\Spec\CliOutputHelper as COH;
 use BlitzPHP\Spec\ReflectionHelper;
 use BlitzPHP\Tasks\Task;
 use BlitzPHP\Utilities\Date;
+use BlitzPHP\Utilities\Helpers;
 
 use function Kahlan\expect;
 
@@ -62,6 +63,17 @@ describe('Task', function () {
         $task = new Task('command', 'foo:bar');
 
         expect($task->getType())->toBe('command');
+        expect($task->type)->toBe('command');
+    });
+
+    it('__set', function () {
+        $task = new Task('command', 'foo:bar');
+
+		$task->fake = 'foo:bar';
+
+		$attributes = ReflectionHelper::getPrivateProperty($task, 'attributes');
+
+        expect($attributes)->toBe(['fake' => 'foo:bar']);
     });
 
     it("Execution d'une commande", function () {
@@ -79,6 +91,10 @@ describe('Task', function () {
 
         expect($task->shouldRun('12:05am'))->toBeFalsy();
         expect($task->shouldRun('12:00am'))->toBeTruthy();
+
+        $task = (new Task('command', 'tasks:test'))->hourly()->environments('production');
+
+        expect($task->shouldRun('12:00am'))->toBeFalsy();
     });
 
     it("Peut s'executer dans un environnement donné", function () {
@@ -120,4 +136,45 @@ describe('Task', function () {
         expect($task->lastRun())->toBeAnInstanceOf(Date::class); // @phpstan-ignore-line
         expect($task->lastRun()->format('Y-m-d H:i:s'))->toBe($date);
     });
+
+	it('Peut executer une commande shell', function () {
+		expect(file_exists($path = __DIR__ . '/test.php'))->toBeFalsy();
+
+		$task = new Task('shell', 'cp ' . __FILE__ . ' ' . $path);
+		$task->run();
+
+		expect(file_exists($path))->toBeTruthy();
+
+		$task = new Task('shell', 'rm ' . $path);
+		$task->run();
+
+		expect(file_exists($path))->toBeFalsy();
+	});
+
+	it('Peut executer un evenement', function () {
+		expect(file_exists($path = __DIR__ . '/test.txt'))->toBeFalsy();
+
+		service('event')->on($event = 'test.event', function() use($path) {
+			file_put_contents($path, 'event.txt');
+		});
+
+		$task = new Task('event', $event);
+		$task->run();
+
+		expect(file_exists($path))->toBeTruthy();
+		expect(file_get_contents($path))->toBe('event.txt');
+
+		unlink($path);
+	});
+
+	it('Peut executer une URL', function () {
+		skipIf(! Helpers::isConnected());
+
+		$task = new Task('url', 'https://raw.githubusercontent.com/blitz-php/tasks/refs/heads/main/composer.json');
+		$result = $task->run();
+		$result = json_decode($result, true);
+
+		expect($result)->toContainKey('name');
+		expect($result['name'])->toBe('blitz-php/tasks');
+	});
 });
