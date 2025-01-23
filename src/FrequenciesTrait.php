@@ -221,7 +221,7 @@ trait FrequenciesTrait
      */
     public function sundays(?string $time = null): self
     {
-        return $this->setDayOfWeek(0, $time);
+        return $this->setDayOfWeek(Scheduler::SUNDAY, $time);
     }
 
     /**
@@ -229,7 +229,7 @@ trait FrequenciesTrait
      */
     public function mondays(?string $time = null): self
     {
-        return $this->setDayOfWeek(1, $time);
+        return $this->setDayOfWeek(Scheduler::MONDAY, $time);
     }
 
     /**
@@ -237,7 +237,7 @@ trait FrequenciesTrait
      */
     public function tuesdays(?string $time = null): self
     {
-        return $this->setDayOfWeek(2, $time);
+        return $this->setDayOfWeek(Scheduler::TUESDAY, $time);
     }
 
     /**
@@ -245,7 +245,7 @@ trait FrequenciesTrait
      */
     public function wednesdays(?string $time = null): self
     {
-        return $this->setDayOfWeek(3, $time);
+        return $this->setDayOfWeek(Scheduler::WEDNESDAY, $time);
     }
 
     /**
@@ -253,7 +253,7 @@ trait FrequenciesTrait
      */
     public function thursdays(?string $time = null): self
     {
-        return $this->setDayOfWeek(4, $time);
+        return $this->setDayOfWeek(Scheduler::THURSDAY, $time);
     }
 
     /**
@@ -261,7 +261,7 @@ trait FrequenciesTrait
      */
     public function fridays(?string $time = null): self
     {
-        return $this->setDayOfWeek(5, $time);
+        return $this->setDayOfWeek(Scheduler::FRIDAY, $time);
     }
 
     /**
@@ -269,7 +269,7 @@ trait FrequenciesTrait
      */
     public function saturdays(?string $time = null): self
     {
-        return $this->setDayOfWeek(6, $time);
+        return $this->setDayOfWeek(Scheduler::SATURDAY, $time);
     }
 
     /**
