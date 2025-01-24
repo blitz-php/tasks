@@ -15,37 +15,37 @@ use function Kahlan\expect;
 
 describe('HookTrait', function () {
     it('testAfter et testBefore', function () {
-		expect(file_exists($path = __DIR__.'/test-hook.txt'))->toBeFalsy();
+        expect(file_exists($path = __DIR__ . '/test-hook.txt'))->toBeFalsy();
 
-		$task = new Task('closure', fn() => 'Hello');
-        $task->before(function() use($path) {
-			file_put_contents($path, 'before');
-		});
-
-        $task->after(function() use($path) {
-			file_put_contents($path, 'after', FILE_APPEND);
-		});
-
-		$result = $task->run();
-
-		expect(file_exists($path))->toBeTruthy();
-		$content = file_get_contents($path);
-
-		expect(str_contains($content, 'before'))->toBeTruthy();
-		expect(str_contains($content, 'after'))->toBeTruthy();
-		expect($result)->toBe('Hello');
-
-		unlink($path);
-    });
-
-	it('sendOutputTo', function () {
-		$task = new Task('closure', function() {
-			echo 'Hello';
-
-			return 'world';
+        $task = new Task('closure', fn () => 'Hello');
+        $task->before(function () use ($path) {
+            file_put_contents($path, 'before');
         });
 
-		$task->sendOutputTo($path = __DIR__ . '/output.txt');
+        $task->after(function () use ($path) {
+            file_put_contents($path, 'after', FILE_APPEND);
+        });
+
+        $result = $task->run();
+
+        expect(file_exists($path))->toBeTruthy();
+        $content = file_get_contents($path);
+
+        expect(str_contains($content, 'before'))->toBeTruthy();
+        expect(str_contains($content, 'after'))->toBeTruthy();
+        expect($result)->toBe('Hello');
+
+        unlink($path);
+    });
+
+    it('sendOutputTo', function () {
+        $task = new Task('closure', function () {
+            echo 'Hello';
+
+            return 'world';
+        });
+
+        $task->sendOutputTo($path = __DIR__ . '/output.txt');
 
         $result = $task->run();
 
@@ -54,16 +54,16 @@ describe('HookTrait', function () {
         expect($result)->toBe('world');
 
         unlink($path);
-	});
+    });
 
-	it('appendOutputTo', function () {
-		$task = new Task('closure', function() {
-			echo 'Hello';
-		});
+    it('appendOutputTo', function () {
+        $task = new Task('closure', function () {
+            echo 'Hello';
+        });
 
-		$task->appendOutputTo($path = __DIR__ . '/output.txt');
+        $task->appendOutputTo($path = __DIR__ . '/output.txt');
 
-		file_put_contents($path, 'World');
+        file_put_contents($path, 'World');
 
         $task->run();
 
@@ -71,33 +71,33 @@ describe('HookTrait', function () {
         expect(file_get_contents($path))->toBe('WorldHello');
 
         unlink($path);
-	});
+    });
 
-	it('onSuccess', function () {
-		$task = new Task('closure', fn() => 'Hello');
+    it('onSuccess', function () {
+        $task = new Task('closure', fn () => 'Hello');
 
-		expect(file_exists($path = __DIR__.'/test-hook.txt'))->toBeFalsy();
+        expect(file_exists($path = __DIR__ . '/test-hook.txt'))->toBeFalsy();
 
-        $task->onSuccess(function() use($path) {
+        $task->onSuccess(function () use ($path) {
             file_put_contents($path, 'Success!');
         });
 
         $task->run();
 
-		expect(file_exists($path))->toBeTruthy();
-		expect(file_get_contents($path))->toBe('Success!');
+        expect(file_exists($path))->toBeTruthy();
+        expect(file_get_contents($path))->toBe('Success!');
 
-		unlink($path);
-	});
+        unlink($path);
+    });
 
-	it('onFailure', function () {
-		$task = new Task('closure', function() {
+    it('onFailure', function () {
+        $task = new Task('closure', function () {
             throw new Exception('Error');
         });
 
-        expect(file_exists($path = __DIR__.'/test-hook.txt'))->toBeFalsy();
+        expect(file_exists($path = __DIR__ . '/test-hook.txt'))->toBeFalsy();
 
-        $task->onFailure(function() use($path) {
+        $task->onFailure(function () use ($path) {
             file_put_contents($path, 'Failure!');
         });
 
@@ -106,15 +106,15 @@ describe('HookTrait', function () {
         expect(file_exists($path))->toBeTruthy();
         expect(file_get_contents($path))->toBe('Failure!');
 
-		unlink($path);
-	});
+        unlink($path);
+    });
 
-	it('onFailure lorsqu\'il y\'a pas exception mais on renvoie un code d\'erreur', function () {
-		$task = new Task('closure', fn() => EXIT_ERROR);
+    it('onFailure lorsqu\'il y\'a pas exception mais on renvoie un code d\'erreur', function () {
+        $task = new Task('closure', fn () => EXIT_ERROR);
 
-        expect(file_exists($path = __DIR__.'/test-hook.txt'))->toBeFalsy();
+        expect(file_exists($path = __DIR__ . '/test-hook.txt'))->toBeFalsy();
 
-        $task->onFailure(function() use($path) {
+        $task->onFailure(function () use ($path) {
             file_put_contents($path, 'Failure!');
         });
 
@@ -123,17 +123,17 @@ describe('HookTrait', function () {
         expect(file_exists($path))->toBeTruthy();
         expect(file_get_contents($path))->toBe('Failure!');
 
-		unlink($path);
-	});
+        unlink($path);
+    });
 
-	it('onFailure avec recuperation de l\'exception', function () {
-		$task = new Task('closure', function() {
+    it('onFailure avec recuperation de l\'exception', function () {
+        $task = new Task('closure', function () {
             throw new Exception('Error');
         });
 
-        expect(file_exists($path = __DIR__.'/test-hook.txt'))->toBeFalsy();
+        expect(file_exists($path = __DIR__ . '/test-hook.txt'))->toBeFalsy();
 
-        $task->onFailure(function(Throwable $e) use($path) {
+        $task->onFailure(function (Throwable $e) use ($path) {
             file_put_contents($path, $e->getMessage());
         });
 
@@ -142,6 +142,6 @@ describe('HookTrait', function () {
         expect(file_exists($path))->toBeTruthy();
         expect(file_get_contents($path))->toBe('Error');
 
-		unlink($path);
-	});
+        unlink($path);
+    });
 });

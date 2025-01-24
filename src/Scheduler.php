@@ -18,19 +18,13 @@ namespace BlitzPHP\Tasks;
  */
 class Scheduler
 {
-	const SUNDAY = 0;
-
-    const MONDAY = 1;
-
-    const TUESDAY = 2;
-
-    const WEDNESDAY = 3;
-
-    const THURSDAY = 4;
-
-    const FRIDAY = 5;
-
-    const SATURDAY = 6;
+    public const SUNDAY    = 0;
+    public const MONDAY    = 1;
+    public const TUESDAY   = 2;
+    public const WEDNESDAY = 3;
+    public const THURSDAY  = 4;
+    public const FRIDAY    = 5;
+    public const SATURDAY  = 6;
 
     /**
      * @var list<Task>
@@ -57,8 +51,8 @@ class Scheduler
 
     /**
      * Planifie l'execution d'une commande.
-	 *
-	 * @param mixed[] $parameters Parameters eventuels a transmettre aux commande.
+     *
+     * @param list<mixed> $parameters Parameters eventuels a transmettre aux commande.
      */
     public function command(string $command, array $parameters = []): Task
     {
@@ -92,9 +86,8 @@ class Scheduler
     }
 
     /**
-     * @param mixed $action
-	 *
-	 * @param mixed[] $parameters Parameters eventuels a transmettre aux taches.
+     * @param mixed       $action
+     * @param list<mixed> $parameters Parameters eventuels a transmettre aux taches.
      */
     protected function createTask(string $type, $action, array $parameters = []): Task
     {

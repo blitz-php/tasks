@@ -44,10 +44,10 @@ describe('FrequenciesTrait', function () {
         $this->class->daily('4:08 pm');
         expect('08 16 * * *')->toBe($this->class->getExpression());
 
-		$this->class->at('4:08 pm');
+        $this->class->at('4:08 pm');
         expect('08 16 * * *')->toBe($this->class->getExpression());
 
-		$this->class->at('04:28');
+        $this->class->at('04:28');
         expect('28 4 * * *')->toBe($this->class->getExpression());
     });
 
@@ -241,16 +241,16 @@ describe('FrequenciesTrait', function () {
         $this->class->everyHour(3);
         $this->assertSame('0 */3 * * *', $this->class->getExpression());
 
-		$this->class->everyTwoHours();
+        $this->class->everyTwoHours();
         $this->assertSame('0 */2 * * *', $this->class->getExpression());
 
-		$this->class->everyThreeHours();
+        $this->class->everyThreeHours();
         $this->assertSame('0 */3 * * *', $this->class->getExpression());
 
-		$this->class->everyFourHours();
+        $this->class->everyFourHours();
         $this->assertSame('0 */4 * * *', $this->class->getExpression());
 
-		$this->class->everySixHours();
+        $this->class->everySixHours();
         $this->assertSame('0 */6 * * *', $this->class->getExpression());
     });
 
@@ -300,19 +300,19 @@ describe('FrequenciesTrait', function () {
         $this->class->everyMinute(15);
         $this->assertSame('*/15 * * * *', $this->class->getExpression());
 
-		$this->class->everyTwoMinutes();
+        $this->class->everyTwoMinutes();
         $this->assertSame('*/2 * * * *', $this->class->getExpression());
 
-		$this->class->everyThreeMinutes();
+        $this->class->everyThreeMinutes();
         $this->assertSame('*/3 * * * *', $this->class->getExpression());
 
-		$this->class->everyFourMinutes();
+        $this->class->everyFourMinutes();
         $this->assertSame('*/4 * * * *', $this->class->getExpression());
 
-		$this->class->everyTenMinutes();
+        $this->class->everyTenMinutes();
         $this->assertSame('*/10 * * * *', $this->class->getExpression());
 
-		$this->class->everyThirtyMinutes();
+        $this->class->everyThirtyMinutes();
         $this->assertSame('*/30 * * * *', $this->class->getExpression());
     });
 
@@ -340,9 +340,9 @@ describe('FrequenciesTrait', function () {
         $this->assertSame('* * 1,15 * *', $this->class->getExpression());
     });
 
-	it('testLastDayOfMonth', function () {
+    it('testLastDayOfMonth', function () {
         $this->class->lastDayOfMonth();
-		$lastDay = Date::now()->endOfMonth()->getDay();
+        $lastDay = Date::now()->endOfMonth()->getDay();
 
         $this->assertSame('0 0 ' . $lastDay . ' * *', $this->class->getExpression());
     });
@@ -359,7 +359,7 @@ describe('FrequenciesTrait', function () {
         $this->assertSame('* * * 1-7 *', $this->class->getExpression());
     });
 
-	it('testBetween', function () {
+    it('testBetween', function () {
         $this->class->between('10:00', '12:30');
 
         $this->assertSame('0-30 10-12 * * *', $this->class->getExpression());

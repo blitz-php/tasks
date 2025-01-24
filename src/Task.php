@@ -35,7 +35,7 @@ use SplFileObject;
 class Task
 {
     use FrequenciesTrait;
-	use HooksTrait;
+    use HooksTrait;
 
     /**
      * Types d'action supportés
@@ -57,7 +57,7 @@ class Task
      */
     protected array $environments = [];
 
-	/**
+    /**
      * Timezone dans lequel la tâche doit être traitée.
      */
     protected ?string $timezone = null;
@@ -69,12 +69,12 @@ class Task
      */
     protected array $attributes = [];
 
-	protected ContainerInterface $container;
+    protected ContainerInterface $container;
 
     /**
-     * @param string $type  Type de l'action en cours.
-	 * @param mixed $action Le contenu actuel qu'on souhaite executer.
-	 * @param mixed[] $parameters Parametres eventuels de l'action
+     * @param string      $type       Type de l'action en cours.
+     * @param mixed       $action     Le contenu actuel qu'on souhaite executer.
+     * @param list<mixed> $parameters Parametres eventuels de l'action
      *
      * @throws TasksException
      */
@@ -84,7 +84,7 @@ class Task
             throw TasksException::invalidTaskType($type);
         }
 
-		$this->container = service('container');
+        $this->container = service('container');
     }
 
     /**
@@ -127,7 +127,7 @@ class Task
             throw TasksException::invalidTaskType($this->type);
         }
 
-		return $this->process($this->container, $method);
+        return $this->process($this->container, $method);
     }
 
     /**
@@ -160,18 +160,18 @@ class Task
         return $this;
     }
 
-	/**
-	 * Définit le fuseau horaire pour l'exécution de la tâche.
-	 *
-	 * @param string $timezone L'identifiant du fuseau horaire à utiliser pour la tâche.
-	 * 						   Il doit s'agir d'une chaîne de caractères PHP valide (par exemple, 'America/New_York', 'Europe/Paris').
-	*/
-	public function timezone(string $timezone): self
-	{
-		$this->timezone = $timezone;
+    /**
+     * Définit le fuseau horaire pour l'exécution de la tâche.
+     *
+     * @param string $timezone L'identifiant du fuseau horaire à utiliser pour la tâche.
+     *                         Il doit s'agir d'une chaîne de caractères PHP valide (par exemple, 'America/New_York', 'Europe/Paris').
+     */
+    public function timezone(string $timezone): self
+    {
+        $this->timezone = $timezone;
 
-		return $this;
-	}
+        return $this;
+    }
 
     /**
      * Renvoie la date à laquelle cette tâche a été exécutée pour la dernière fois.
@@ -213,9 +213,8 @@ class Task
      */
     protected function runCommand(): string
     {
-		if (class_exists($command = $this->getAction())) {
-
-		}
+        if (class_exists($command = $this->getAction())) {
+        }
 
         return command($command);
     }

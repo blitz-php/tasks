@@ -94,7 +94,7 @@ describe('Scheduler', function () {
         expect('shell')->toBe($task->getType());
     });
 
-	it('Peut sauvegarder un evenement', function () {
+    it('Peut sauvegarder un evenement', function () {
         $task = $this->scheduler->event('foo.bar');
 
         expect($task)->toBeAnInstanceOf(Task::class);
@@ -102,7 +102,7 @@ describe('Scheduler', function () {
         expect('event')->toBe($task->getType());
     });
 
-	it('Peut sauvegarder un appel d\'URL', function () {
+    it('Peut sauvegarder un appel d\'URL', function () {
         $task = $this->scheduler->url('http://localhost');
 
         expect($task)->toBeAnInstanceOf(Task::class);
