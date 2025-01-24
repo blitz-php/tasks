@@ -35,6 +35,7 @@ use SplFileObject;
 class Task
 {
     use FrequenciesTrait;
+	use HooksTrait;
 
     /**
      * Types d'action supportés
@@ -125,7 +126,7 @@ class Task
             throw TasksException::invalidTaskType($this->type);
         }
 
-        return $this->{$method}();
+		return $this->process($this->container, $method);
     }
 
     /**
