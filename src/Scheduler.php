@@ -57,6 +57,8 @@ class Scheduler
 
     /**
      * Planifie l'execution d'une commande.
+	 *
+	 * @param mixed[] $parameters Parameters eventuels a transmettre aux commande.
      */
     public function command(string $command, array $parameters = []): Task
     {
@@ -91,6 +93,8 @@ class Scheduler
 
     /**
      * @param mixed $action
+	 *
+	 * @param mixed[] $parameters Parameters eventuels a transmettre aux taches.
      */
     protected function createTask(string $type, $action, array $parameters = []): Task
     {

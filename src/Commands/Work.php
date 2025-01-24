@@ -25,14 +25,16 @@ class Work extends TaskCommand
     protected $description = 'Démarre le planificateur de tâche et l\'exécute localement.';
 
     /**
-     * {@inheritDoc}
+     * @var list<string>
      */
     protected $required = [
         'symfony/process:^7.2',
     ];
 
-    /** 
+    /**
      * {@inheritDoc}
+	 *
+	 * @return void
      */
     public function execute(array $params)
     {
@@ -41,9 +43,9 @@ class Work extends TaskCommand
         [$lastExecutionStartedAt, $executions] = [Date::now()->subMinutes(10), []];
 
         $command = sprintf(
-            '%s %s %s', 
-            escapeshellarg(PHP_BINARY), 
-            escapeshellarg(base_path('klinge')), 
+            '%s %s %s',
+            escapeshellarg(PHP_BINARY),
+            escapeshellarg(base_path('klinge')),
             'tasks:run'
         );
 

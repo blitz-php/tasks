@@ -175,6 +175,8 @@ trait FrequenciesTrait
 
     /**
      * S'execute toutes les heures impaires
+     *
+     * @param int|string|null $minute
      */
     public function everyOddHour($minute = null): self
     {
@@ -233,7 +235,7 @@ trait FrequenciesTrait
     /**
      * S'execute toutes les 3 minutes
      */
-    public function everyThreeMinutes()
+    public function everyThreeMinutes(): self
     {
         return $this->everyMinute(3);
     }
@@ -241,7 +243,7 @@ trait FrequenciesTrait
     /**
      * S'execute toutes les 4 minutes
      */
-    public function everyFourMinutes()
+    public function everyFourMinutes(): self
     {
         return $this->everyMinute(4);
     }
@@ -423,11 +425,11 @@ trait FrequenciesTrait
     /**
      * S'execute le dernier jours du mois
      */
-    public function lastDayOfMonth(?string $time = null)
+    public function lastDayOfMonth(?string $time = null): self
     {
         $this->daily($time);
 
-		return $this->daysOfMonth(Date::now()->endOfMonth()->getDay());
+		return $this->daysOfMonth((int) Date::now()->endOfMonth()->getDay());
     }
 
     /**
@@ -479,7 +481,7 @@ trait FrequenciesTrait
 	/**
      * S'execute tous les trimestres à un jour et une heure donnés.
      */
-    public function quarterlyOn(int $dayOfQuarter = 1, ?string $time = null)
+    public function quarterlyOn(int $dayOfQuarter = 1, ?string $time = null): self
 	{
         $min = $hour = 0;
 

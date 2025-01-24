@@ -74,6 +74,7 @@ class Task
     /**
      * @param string $type  Type de l'action en cours.
 	 * @param mixed $action Le contenu actuel qu'on souhaite executer.
+	 * @param mixed[] $parameters Parametres eventuels de l'action
      *
      * @throws TasksException
      */
@@ -212,7 +213,11 @@ class Task
      */
     protected function runCommand(): string
     {
-        return command($this->getAction());
+		if (class_exists($command = $this->getAction())) {
+
+		}
+
+        return command($command);
     }
 
     /**

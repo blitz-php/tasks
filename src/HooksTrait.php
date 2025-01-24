@@ -179,7 +179,7 @@ trait HooksTrait
 	/**
 	 * Procede a l'execution de la tache
 	 */
-	protected function process(ContainerInterface $container, $method): mixed
+	protected function process(ContainerInterface $container, string $method): mixed
 	{
 		ob_start();
 
@@ -201,7 +201,7 @@ trait HooksTrait
      *
      * @throws Throwable
      */
-    protected function start(ContainerInterface $container, string $runMethod): mixed
+    protected function start(ContainerInterface $container, string $runMethod)
     {
         try {
             $this->callBeforeCallbacks($container);
@@ -251,19 +251,19 @@ trait HooksTrait
     }
 
     /**
-     * Ensure that the command output is being captured.
-     *
-     * @return void
+     * S'assurer que les résultats de la tâche sont capturés.
      */
-    protected function ensureOutputIsBeingCaptured()
+    protected function ensureOutputIsBeingCaptured(): void
     {
-        if (is_null($this->output) || $this->output == $this->getDefaultOutput()) {
-            $this->sendOutputTo(storage_path('logs/schedule-'.sha1($this->mutexName()).'.log'));
+        if (null === $this->location) {
+            $this->sendOutputTo(storage_path('logs/task-' . sha1($this->name) . '.log'));
         }
     }
 
     /**
      * Envoie du résultat de l'execution de la tache par mail aux destinataires.
+	 *
+	 * @param list<string> $addresses Liste des addresses a qui le mail sera envoyer
      */
     protected function emailOutput(MailerInterface $mailer, array $addresses, bool $onlyIfOutputExists = false): void
     {
@@ -281,7 +281,7 @@ trait HooksTrait
      */
     protected function getEmailSubject(): string
     {
-        return "Sortie de la tâche planifiée pour [{$this->command}]";
+        return "Sortie de la tâche planifiée pour [{$this->name}]";
     }
 
 	/**
@@ -312,7 +312,10 @@ trait HooksTrait
 		return $output;
     }
 
-	protected function registerException(Throwable $e)
+	/**
+     * Marque l'exception en cours et définit le code de sortie à EXIT_ERROR.
+     */
+	protected function registerException(Throwable $e): void
 	{
 		$this->exception = $e;
 		$this->exitCode  = EXIT_ERROR;
