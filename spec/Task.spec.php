@@ -69,9 +69,9 @@ describe('Task', function () {
     it('__set', function () {
         $task = new Task('command', 'foo:bar');
 
-		$task->fake = 'foo:bar';
+        $task->fake = 'foo:bar';
 
-		$attributes = ReflectionHelper::getPrivateProperty($task, 'attributes');
+        $attributes = ReflectionHelper::getPrivateProperty($task, 'attributes');
 
         expect($attributes)->toBe(['fake' => 'foo:bar']);
     });
@@ -137,44 +137,44 @@ describe('Task', function () {
         expect($task->lastRun()->format('Y-m-d H:i:s'))->toBe($date);
     });
 
-	it('Peut executer une commande shell', function () {
-		expect(file_exists($path = __DIR__ . '/test.php'))->toBeFalsy();
+    it('Peut executer une commande shell', function () {
+        expect(file_exists($path = __DIR__ . '/test.php'))->toBeFalsy();
 
-		$task = new Task('shell', 'cp ' . __FILE__ . ' ' . $path);
-		$task->run();
+        $task = new Task('shell', 'cp ' . __FILE__ . ' ' . $path);
+        $task->run();
 
-		expect(file_exists($path))->toBeTruthy();
+        expect(file_exists($path))->toBeTruthy();
 
-		$task = new Task('shell', 'rm ' . $path);
-		$task->run();
+        $task = new Task('shell', 'rm ' . $path);
+        $task->run();
 
-		expect(file_exists($path))->toBeFalsy();
-	});
+        expect(file_exists($path))->toBeFalsy();
+    });
 
-	it('Peut executer un evenement', function () {
-		expect(file_exists($path = __DIR__ . '/test.txt'))->toBeFalsy();
+    it('Peut executer un evenement', function () {
+        expect(file_exists($path = __DIR__ . '/test.txt'))->toBeFalsy();
 
-		service('event')->on($event = 'test.event', function() use($path) {
-			file_put_contents($path, 'event.txt');
-		});
+        service('event')->on($event = 'test.event', function () use ($path) {
+            file_put_contents($path, 'event.txt');
+        });
 
-		$task = new Task('event', $event);
-		$task->run();
+        $task = new Task('event', $event);
+        $task->run();
 
-		expect(file_exists($path))->toBeTruthy();
-		expect(file_get_contents($path))->toBe('event.txt');
+        expect(file_exists($path))->toBeTruthy();
+        expect(file_get_contents($path))->toBe('event.txt');
 
-		unlink($path);
-	});
+        unlink($path);
+    });
 
-	it('Peut executer une URL', function () {
-		skipIf(! Helpers::isConnected());
+    it('Peut executer une URL', function () {
+        skipIf(! Helpers::isConnected());
 
-		$task = new Task('url', 'https://raw.githubusercontent.com/blitz-php/tasks/refs/heads/main/composer.json');
-		$result = $task->run();
-		$result = json_decode($result, true);
+        $task   = new Task('url', 'https://raw.githubusercontent.com/blitz-php/tasks/refs/heads/main/composer.json');
+        $result = $task->run();
+        $result = json_decode($result, true);
 
-		expect($result)->toContainKey('name');
-		expect($result['name'])->toBe('blitz-php/tasks');
-	});
+        expect($result)->toContainKey('name');
+        expect($result['name'])->toBe('blitz-php/tasks');
+    });
 });

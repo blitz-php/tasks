@@ -27,7 +27,7 @@ class CronExpression
      */
     protected string $timezone;
 
-	/**
+    /**
      * Le fuseau horaire global à utiliser.
      */
     private string $globalTimezone;
@@ -51,24 +51,24 @@ class CronExpression
      */
     public function __construct(?string $timezone = null)
     {
-		if (null === $globalTimezone = config('tasks.timezone')) {
-			$globalTimezone = config('app.timezone');
-		}
+        if (null === $globalTimezone = config('tasks.timezone')) {
+            $globalTimezone = config('app.timezone');
+        }
 
-		$this->globalTimezone = $globalTimezone;
+        $this->globalTimezone = $globalTimezone;
 
         $this->setTimezone($timezone);
     }
 
-	/**
-	 * Définit le fuseau horaire global pour toutes les tâches de construction.
-	*/
-	public function setTimezone(?string $timezone = null): self
-	{
-		$this->timezone = $timezone ?? $this->globalTimezone;
+    /**
+     * Définit le fuseau horaire global pour toutes les tâches de construction.
+     */
+    public function setTimezone(?string $timezone = null): self
+    {
+        $this->timezone = $timezone ?? $this->globalTimezone;
 
-		return $this;
-	}
+        return $this;
+    }
 
     /**
      * Vérifie si l'expression cron doit être exécutée. Permet d'utiliser un fuseau horaire personnalisé pour une tâche spécifique

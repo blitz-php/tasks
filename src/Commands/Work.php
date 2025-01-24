@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of BlitzPHP Tasks.
+ *
+ * (c) 2025 Dimitri Sitchet Tomkeu <devcode.dst@gmail.com>
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace BlitzPHP\Tasks\Commands;
 
 use BlitzPHP\Utilities\Date;
@@ -25,14 +34,16 @@ class Work extends TaskCommand
     protected $description = 'Démarre le planificateur de tâche et l\'exécute localement.';
 
     /**
-     * {@inheritDoc}
+     * @var list<string>
      */
     protected $required = [
         'symfony/process:^7.2',
     ];
 
-    /** 
+    /**
      * {@inheritDoc}
+     *
+     * @return void
      */
     public function execute(array $params)
     {
@@ -41,9 +52,9 @@ class Work extends TaskCommand
         [$lastExecutionStartedAt, $executions] = [Date::now()->subMinutes(10), []];
 
         $command = sprintf(
-            '%s %s %s', 
-            escapeshellarg(PHP_BINARY), 
-            escapeshellarg(base_path('klinge')), 
+            '%s %s %s',
+            escapeshellarg(PHP_BINARY),
+            escapeshellarg(base_path('klinge')),
             'tasks:run'
         );
 
@@ -54,7 +65,7 @@ class Work extends TaskCommand
         while (true) {
             usleep(100 * 1000);
 
-            if (intval(Date::now()->getSecond()) === 0 && ! Date::now()->startOfMinute()->equalTo($lastExecutionStartedAt)) {
+            if ((int) (Date::now()->getSecond()) === 0 && ! Date::now()->startOfMinute()->equalTo($lastExecutionStartedAt)) {
                 $executions[] = $execution = Process::fromShellCommandline($command);
 
                 $execution->start();
@@ -63,7 +74,7 @@ class Work extends TaskCommand
             }
 
             foreach ($executions as $key => $execution) {
-                $output = $execution->getIncrementalOutput(). $execution->getIncrementalErrorOutput();
+                $output = $execution->getIncrementalOutput() . $execution->getIncrementalErrorOutput();
 
                 $this->write(ltrim($output, "\n"))->eol();
 

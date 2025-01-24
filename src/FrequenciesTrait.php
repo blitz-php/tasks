@@ -68,7 +68,7 @@ trait FrequenciesTrait
         return $this->daily($time);
     }
 
-	/**
+    /**
      * S'exécute tous les jours à minuit, sauf si une chaîne d'heure est transmise (comme 04:08pm)
      */
     public function daily(?string $time = null): self
@@ -85,16 +85,16 @@ trait FrequenciesTrait
         return $this;
     }
 
-	/**
+    /**
      * S'execute entre une temps de debut et de fin
      */
     public function between(string $startTime, string $endTime): self
     {
-		[$minStart, $hourStart] = array_map('intval', $this->parseTime($startTime));
-		[$minEnd, $hourEnd]     = array_map('intval', $this->parseTime($endTime));
+        [$minStart, $hourStart] = array_map('intval', $this->parseTime($startTime));
+        [$minEnd, $hourEnd]     = array_map('intval', $this->parseTime($endTime));
 
-		$this->betweenHours($hourStart, $hourEnd);
-		$this->betweenMinutes($minStart, $minEnd);
+        $this->betweenHours($hourStart, $hourEnd);
+        $this->betweenMinutes($minStart, $minEnd);
 
         return $this;
     }
@@ -133,7 +133,7 @@ trait FrequenciesTrait
         return $this;
     }
 
-	/**
+    /**
      * S'exécute toutes les 2 heures
      *
      * @param int|string|null $minute
@@ -143,7 +143,7 @@ trait FrequenciesTrait
         return $this->everyHour(2, $minute);
     }
 
-	/**
+    /**
      * S'exécute toutes les 3 heures
      *
      * @param int|string|null $minute
@@ -153,7 +153,7 @@ trait FrequenciesTrait
         return $this->everyHour(3, $minute);
     }
 
-	/**
+    /**
      * S'exécute toutes les 4 heures
      *
      * @param int|string|null $minute
@@ -163,7 +163,7 @@ trait FrequenciesTrait
         return $this->everyHour(4, $minute);
     }
 
-	/**
+    /**
      * S'exécute toutes les 6 heures
      *
      * @param int|string|null $minute
@@ -175,10 +175,12 @@ trait FrequenciesTrait
 
     /**
      * S'execute toutes les heures impaires
+     *
+     * @param int|string|null $minute
      */
     public function everyOddHour($minute = null): self
     {
-		$this->expression['min']  = $minute ?? '0';
+        $this->expression['min']  = $minute ?? '0';
         $this->expression['hour'] = '1-23/2';
 
         return $this;
@@ -233,7 +235,7 @@ trait FrequenciesTrait
     /**
      * S'execute toutes les 3 minutes
      */
-    public function everyThreeMinutes()
+    public function everyThreeMinutes(): self
     {
         return $this->everyMinute(3);
     }
@@ -241,7 +243,7 @@ trait FrequenciesTrait
     /**
      * S'execute toutes les 4 minutes
      */
-    public function everyFourMinutes()
+    public function everyFourMinutes(): self
     {
         return $this->everyMinute(4);
     }
@@ -259,7 +261,7 @@ trait FrequenciesTrait
      */
     public function everyTenMinutes(): self
     {
-		return $this->everyMinute(10);
+        return $this->everyMinute(10);
     }
 
     /**
@@ -384,10 +386,10 @@ trait FrequenciesTrait
         return $this->monthlyOn(1, $time);
     }
 
-	/**
+    /**
      * S'execute mensuellement à un jour et une heure donnés.
      *
-     * @param  int<1, 31>  $dayOfMonth
+     * @param int<1, 31> $dayOfMonth
      */
     public function monthlyOn(int $dayOfMonth = 1, ?string $time = null): self
     {
@@ -423,11 +425,11 @@ trait FrequenciesTrait
     /**
      * S'execute le dernier jours du mois
      */
-    public function lastDayOfMonth(?string $time = null)
+    public function lastDayOfMonth(?string $time = null): self
     {
         $this->daily($time);
 
-		return $this->daysOfMonth(Date::now()->endOfMonth()->getDay());
+        return $this->daysOfMonth((int) Date::now()->endOfMonth()->getDay());
     }
 
     /**
@@ -476,11 +478,11 @@ trait FrequenciesTrait
         return $this->quarterlyOn(1, $time);
     }
 
-	/**
+    /**
      * S'execute tous les trimestres à un jour et une heure donnés.
      */
-    public function quarterlyOn(int $dayOfQuarter = 1, ?string $time = null)
-	{
+    public function quarterlyOn(int $dayOfQuarter = 1, ?string $time = null): self
+    {
         $min = $hour = 0;
 
         if (! empty($time)) {
@@ -504,10 +506,10 @@ trait FrequenciesTrait
         return $this->yearlyOn(1, 1, $time);
     }
 
-	/**
+    /**
      * S'execute chaque année à un mois, un jour et une heure donnés.
      *
-     * @param  int<1, 31>  $dayOfMonth
+     * @param int<1, 31> $dayOfMonth
      */
     public function yearlyOn(int $month = 1, int $dayOfMonth = 1, ?string $time = null): self
     {
