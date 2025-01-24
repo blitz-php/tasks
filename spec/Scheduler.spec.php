@@ -91,5 +91,22 @@ describe('Scheduler', function () {
 
         expect($task)->toBeAnInstanceOf(Task::class);
         expect('foo:bar')->toBe($task->getAction());
+        expect('shell')->toBe($task->getType());
+    });
+
+	it('Peut sauvegarder un evenement', function () {
+        $task = $this->scheduler->event('foo.bar');
+
+        expect($task)->toBeAnInstanceOf(Task::class);
+        expect('foo.bar')->toBe($task->getAction());
+        expect('event')->toBe($task->getType());
+    });
+
+	it('Peut sauvegarder un appel d\'URL', function () {
+        $task = $this->scheduler->url('http://localhost');
+
+        expect($task)->toBeAnInstanceOf(Task::class);
+        expect('http://localhost')->toBe($task->getAction());
+        expect('url')->toBe($task->getType());
     });
 });

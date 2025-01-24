@@ -117,7 +117,7 @@ trait FrequenciesTrait
      */
     public function hourly(?int $minute = null): self
     {
-        return $this->everyHour(1, $minute);
+        return $this->everyHour(1, $minute ?? '00');
     }
 
     /**

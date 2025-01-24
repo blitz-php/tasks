@@ -24,6 +24,7 @@
     "require-dev": {
         "blitz-php/coding-standard": "^1.4",
         "blitz-php/framework": "^0.11.3",
+        "blitz-php/http-client": "^0.0.2",
         "kahlan/kahlan": "^6.0",
         "phpstan/phpstan": "^2.1"
     },

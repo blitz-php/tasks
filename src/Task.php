@@ -35,6 +35,7 @@ use SplFileObject;
 class Task
 {
     use FrequenciesTrait;
+	use HooksTrait;
 
     /**
      * Types d'action supportés
@@ -125,7 +126,7 @@ class Task
             throw TasksException::invalidTaskType($this->type);
         }
 
-        return $this->{$method}();
+		return $this->process($this->container, $method);
     }
 
     /**
@@ -141,7 +142,7 @@ class Task
         }
 
         // Sommes-nous limités aux environnements?
-        if (! empty($this->environments) && ! $this->runsInEnvironment(environment())) {
+        if (! $this->runsInEnvironment(environment())) {
             return false;
         }
 
@@ -199,12 +200,7 @@ class Task
      */
     protected function runsInEnvironment(string $environment): bool
     {
-        // Si rien n'est spécifié, il doit s'exécuter
-        if (empty($this->environments)) {
-            return true;
-        }
-
-        return in_array($environment, $this->environments, true);
+        return empty($this->environments) || in_array($environment, $this->environments, true);
     }
 
     /**
