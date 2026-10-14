@@ -55,7 +55,7 @@ class Work extends TaskCommand
             '%s %s %s',
             escapeshellarg(PHP_BINARY),
             escapeshellarg(base_path('klinge')),
-            'tasks:run'
+            'tasks:run',
         );
 
         if ($this->option('run-output-file')) {
