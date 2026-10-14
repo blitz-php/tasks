@@ -90,10 +90,10 @@ class Scheduler
 
     /**
      * Planifie l'execution d'un job dans la file d'attente.
-     * 
+     *
      * @param class-string<Job>|Job $job
      */
-    public function job(string|object $job, ?string $queue = null, ?string $driver = null)
+    public function job(object|string $job, ?string $queue = null, ?string $driver = null)
     {
         return $this->call(function () use ($job, $queue, $driver) {
             /** @var Job $job */
@@ -104,7 +104,7 @@ class Scheduler
             } else {
                 $job->execute();
             }
-        })->named(is_string($job) ? $job : get_class($job));
+        })->named(is_string($job) ? $job : $job::class);
     }
 
     /**
