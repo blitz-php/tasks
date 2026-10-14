@@ -30,3 +30,4 @@ Services::container()->initialize();
 config()->load('parametres', VENDOR_PATH . 'blitz-php/parametres/src/Config/parametres.php');
 config()->set('parametres.file.path', storage_path('.parametres.json'));
 config()->load('tasks', __DIR__ . '/../src/Config/tasks.php');
+config()->ghost('cache', ['handler' => 'file']);
