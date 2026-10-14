@@ -58,6 +58,16 @@ class Task
     protected array $environments = [];
 
     /**
+     * Faut-il empêcher les exécutions simultanées de cette tâche ?
+     */
+    protected bool $singleInstance = false;
+
+    /**
+     * Durée maximale de verrouillage en secondes pour les tâches single instance.
+     */
+    protected ?int $singleInstanceTTL = null;
+
+    /**
      * Timezone dans lequel la tâche doit être traitée.
      */
     protected ?string $timezone = null;
@@ -122,12 +132,23 @@ class Task
      */
     public function run()
     {
-        $method = 'run' . ucfirst($this->type);
-        if (! method_exists($this, $method)) {
-            throw TasksException::invalidTaskType($this->type);
+        if ($this->singleInstance) {
+            $lockKey = $this->getLockKey();
+            cache()->set($lockKey, [], $this->singleInstanceTTL ?? 0);
         }
 
-        return $this->process($this->container, $method);
+        try {
+            $method = 'run' . ucfirst($this->type);
+            if (! method_exists($this, $method)) {
+                throw TasksException::invalidTaskType($this->type);
+            }
+    
+            return $this->process($this->container, $method);
+        } finally {
+            if ($this->singleInstance) {
+                cache()->delete($lockKey);
+            }
+        }
     }
 
     /**
@@ -147,7 +168,25 @@ class Task
             return false;
         }
 
+        // S'il s'agit d'une tâche à instance unique et qu'un verrou est présent, ne pas l'exécuter
+        if ($this->singleInstance && cache()->get($this->getLockKey()) !== null) {
+            return false;
+        }
+
         return $cron->shouldRun($this->getExpression());
+    }
+
+    /**
+     * Définit cette tâche comme une instance unique
+     *
+     * @param int|null $lockTTL Durée de vie du verrou de cache en secondes
+     */
+    public function singleInstance(?int $lockTTL = null): static
+    {
+        $this->singleInstance    = true;
+        $this->singleInstanceTTL = $lockTTL;
+
+        return $this;
     }
 
     /**
@@ -321,5 +360,17 @@ class Task
     public function __set(string $name, mixed $value): void
     {
         $this->attributes[$name] = $value;
+    }
+
+    /**
+     * Détermine la clé de verrouillage pour la tâche.
+     *
+     * @throws ReflectionException
+     */
+    private function getLockKey(): string
+    {
+        $name = $this->attributes['name'] ?? $this->buildName();
+
+        return 'task_lock_' . $name;
     }
 }

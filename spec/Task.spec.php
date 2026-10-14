@@ -11,6 +11,7 @@
 
 use BlitzPHP\Spec\CliOutputHelper as COH;
 use BlitzPHP\Spec\ReflectionHelper;
+use BlitzPHP\Tasks\Exceptions\TasksException;
 use BlitzPHP\Tasks\Task;
 use BlitzPHP\Utilities\Date;
 use BlitzPHP\Utilities\Helpers;
@@ -137,7 +138,136 @@ describe('Task', function () {
         expect($task->lastRun()->format('Y-m-d H:i:s'))->toBe($date);
     });
 
-    it('Peut executer une commande shell', function () {
+    it('Execute une tache unique', function () {
+        $task = new Task('command', 'foo:bar');
+
+        expect($task->singleInstance)->toBeFalsy();
+
+        $result = $task->singleInstance();
+        expect($task->singleInstance)->toBeTruthy();
+        expect($task->singleInstanceTTL)->toBeNull();
+        expect($result)->toBe($task);
+
+        // Test avec un TTL personnalisé
+        $task->singleInstance(3600);
+        expect($task->singleInstance)->toBeTruthy();
+        expect($task->singleInstanceTTL)->toBe(3600);
+    });
+
+    it('Recuperation de la cle de verouillage', function () {
+        $task = new Task('command', 'foo:bar');
+        $task->named('test_task');
+
+        $method   = ReflectionHelper::getPrivateMethodInvoker($task, 'getLockKey');
+        $expected = 'task_lock_test_task';
+
+        expect($method())->toBe($expected);
+
+        // Test avec une tache sans nom - doit utiliser le nom dynamique
+        $task   = new Task('command', 'foo:bar');
+        $method = ReflectionHelper::getPrivateMethodInvoker($task, 'getLockKey');
+
+        // Doit utiliser le nom de la tache depuis le getter magique
+        $expected = "task_lock_{$task->name}";
+        expect($method())->toBe($expected);
+    });
+
+    it('Cohérence de la clé de verrouillage pour les tâches nommées', function () {
+        // Créer deux tâches closure différentes avec le même nom
+        $closure1 = static fn () => 'test1';
+
+        $closure2 = static function () {
+            return 'test2'; // Different functionality
+        };
+
+        $task1 = new Task('closure', $closure1);
+        $task2 = new Task('closure', $closure2);
+
+        // Si elles ont le même nom, elles devraient avoir la même clé de verrouillage
+        $task1->named('same_name');
+        $task2->named('same_name');
+
+        $getLockKey1 = ReflectionHelper::getPrivateMethodInvoker($task1, 'getLockKey');
+        $getLockKey2 = ReflectionHelper::getPrivateMethodInvoker($task2, 'getLockKey');
+
+        expect($getLockKey1())->toBe($getLockKey2());
+
+        // Des noms différents devraient produire des clés différentes
+        $task3 = new Task('closure', $closure1);
+        $task3->named('different_name');
+
+        $getLockKey3 = ReflectionHelper::getPrivateMethodInvoker($task3, 'getLockKey');
+
+        expect($getLockKey1())->not->toBe($getLockKey3());
+    });
+
+    it('shouldRun avec singleInstance', function () {
+        $task = (new Task('command', 'foo:bar'))
+            ->named('test_should_run')
+            ->hourly()
+            ->singleInstance();
+
+        // Devrait s'exécuter à l'heure correcte sans verrou existant
+        expect($task->shouldRun('12:00am'))->toBeTruthy();
+
+        // Créer un verrou
+        $lockKey = ReflectionHelper::getPrivateMethodInvoker($task, 'getLockKey')();
+        cache()->set($lockKey, [], 3600);
+
+        // Should not run if a lock exists
+        expect($task->shouldRun('12:00am'))->toBeFalsy();
+
+        cache()->delete($lockKey);
+    });
+
+    it('run avec singleInstance', function () {
+        $task = new Task('closure', static fn () => 'task executed');
+        $task->named('test_run_single');
+        $task->singleInstance();
+
+        $result = $task->run();
+        expect($result)->toBe('task executed');
+        $lockKey = ReflectionHelper::getPrivateMethodInvoker($task, 'getLockKey')();
+        expect(cache()->get($lockKey))->toBeNull();
+    });
+
+    it('verrou libéré après une exception', function () {
+        $task = new Task('command', 'invalid:command');
+        $task->named('test_exception');
+        $task->singleInstance();
+
+        $reflection = new ReflectionClass($task);
+        $property   = $reflection->getProperty('type');
+        $property->setValue($task, 'invalid_type');
+
+        $lockKey = ReflectionHelper::getPrivateMethodInvoker($task, 'getLockKey')();
+
+        try {
+            $task->run();
+            expect(false)->toBe(true); // Should not reach here
+        } catch (Exception $e) {
+            expect($e)->toBeAnInstanceOf(TasksException::class);
+        }
+
+        expect(cache()->get($lockKey))->toBeNull();
+    });
+
+    it('singleInstance avec TTL personnalisé', function () {
+        $task = new Task('closure', static fn () => 'done');
+        $task->named('test_ttl');
+
+        $task->singleInstance(60);
+
+        expect(ReflectionHelper::getPrivateProperty($task, 'singleInstanceTTL'))->toBe(60);
+
+        $task2 = new Task('closure', static fn () => 'done');
+        $task2->named('test_no_ttl');
+        $task2->singleInstance();
+
+        expect(ReflectionHelper::getPrivateProperty($task2, 'singleInstanceTTL'))->toBeNull();
+    });
+
+    it('Peut exécuter une commande shell', function () {
         expect(file_exists($path = __DIR__ . '/test.php'))->toBeFalsy();
 
         $task = new Task('shell', 'cp ' . __FILE__ . ' ' . $path);
