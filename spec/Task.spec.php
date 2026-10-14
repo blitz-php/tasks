@@ -83,7 +83,7 @@ describe('Task', function () {
         $task->run();
 
         expect(COH::buffer())->toMatch(
-            static fn ($actual) => str_contains($actual, 'La commande peut produire du texte.')
+            static fn ($actual) => str_contains($actual, 'La commande peut produire du texte.'),
         );
     });
 

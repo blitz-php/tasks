@@ -142,7 +142,7 @@ class Task
             if (! method_exists($this, $method)) {
                 throw TasksException::invalidTaskType($this->type);
             }
-    
+
             return $this->process($this->container, $method);
         } finally {
             if ($this->singleInstance) {
