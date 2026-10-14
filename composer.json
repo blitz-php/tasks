@@ -25,6 +25,7 @@
         "blitz-php/coding-standard": "^1.4",
         "blitz-php/framework": "^0.12",
         "blitz-php/http-client": "^0.0.2",
+        "blitz-php/queue": "^0.2.0",
         "kahlan/kahlan": "^6.0",
         "phpstan/phpstan": "^2.1"
     },

@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace BlitzPHP\Tasks;
 
+use BlitzPHP\Contracts\Queue\ShouldQueue;
+use BlitzPHP\Queue\Job;
+
 /**
  * @credit <a href="https://tasks.codeigniter.com">CodeIgniter4 - CodeIgniter\Tasks\Scheduler</a>
  */
@@ -83,6 +86,25 @@ class Scheduler
     public function url(string $url): Task
     {
         return $this->createTask('url', $url);
+    }
+
+    /**
+     * Planifie l'execution d'un job dans la file d'attente.
+     * 
+     * @param class-string<Job>|Job $job
+     */
+    public function job(string|object $job, ?string $queue = null, ?string $driver = null)
+    {
+        return $this->call(function () use ($job, $queue, $driver) {
+            /** @var Job $job */
+            $job = is_string($job) ? service('container')->make($job) : $job;
+
+            if ($job instanceof ShouldQueue) {
+                service('queue')->driver($driver ?? $job->driver ?? null)->pushOn($queue ?? $job->queue(), $job);
+            } else {
+                $job->execute();
+            }
+        })->named(is_string($job) ? $job : get_class($job));
     }
 
     /**
