@@ -58,6 +58,11 @@ class Task
     protected array $environments = [];
 
     /**
+     * L'alias sous lesquel cette tâche peut être exécutée
+     */
+    protected string $name;
+
+    /**
      * Faut-il empêcher les exécutions simultanées de cette tâche ?
      */
     protected bool $singleInstance = false;
@@ -102,7 +107,7 @@ class Task
      */
     public function named(string $name): self
     {
-        $this->attributes['name'] = $name;
+        $this->name = $name;
 
         return $this;
     }
@@ -343,7 +348,7 @@ class Task
      */
     public function __get(string $key)
     {
-        if ($key === 'name' && empty($this->attributes['name'])) {
+        if ($key === 'name' && (! isset($this->name) || ($this->name === ''))) {
             return $this->buildName();
         }
 
@@ -359,7 +364,11 @@ class Task
      */
     public function __set(string $name, mixed $value): void
     {
-        $this->attributes[$name] = $value;
+        if ($name === 'name' && (! isset($this->name) || ($this->name === ''))) {
+            $this->name = $value;
+        } else {
+            $this->attributes[$name] = $value;
+        }
     }
 
     /**
@@ -369,7 +378,7 @@ class Task
      */
     private function getLockKey(): string
     {
-        $name = $this->attributes['name'] ?? $this->buildName();
+        $name = $this->name ?? $this->buildName();
 
         return 'task_lock_' . $name;
     }

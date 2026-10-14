@@ -181,9 +181,9 @@ trait HooksTrait
     {
         ob_start();
 
-        $result = $this->start($this->container, $method);
+        $result = $this->start($container, $method);
 
-        $result = $this->finish($this->container, $result);
+        $result = $this->finish($container, $result);
 
         ob_end_flush();
 
