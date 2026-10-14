@@ -11,7 +11,7 @@
 
 namespace BlitzPHP\Tasks\Commands;
 
-use BlitzPHP\Utilities\Date;
+use BlitzPHP\Utilities\DateTime\Date;
 use Symfony\Component\Process\Process;
 
 class Work extends TaskCommand
@@ -19,24 +19,24 @@ class Work extends TaskCommand
     /**
      * {@inheritDoc}
      */
-    protected $name = 'tasks:work';
+    protected string $name = 'tasks:work';
 
     /**
      * {@inheritDoc}
      */
-    protected $options = [
+    protected array $options = [
         '--run-output-file' => 'Le fichier vers lequel diriger la sortie de `tasks:run`.',
     ];
 
     /**
      * {@inheritDoc}
      */
-    protected $description = 'Démarre le planificateur de tâche et l\'exécute localement.';
+    protected string $description = 'Démarre le planificateur de tâche et l\'exécute localement.';
 
     /**
      * @var list<string>
      */
-    protected $required = [
+    protected array $required = [
         'symfony/process:^7.2',
     ];
 
@@ -45,7 +45,7 @@ class Work extends TaskCommand
      *
      * @return void
      */
-    public function execute(array $params)
+    public function handle()
     {
         $this->info('Exéctutions des tâches programmées.');
 

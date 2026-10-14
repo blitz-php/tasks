@@ -23,7 +23,7 @@ abstract class TaskCommand extends Command
     /**
      * {@inheritDoc}
      */
-    protected $group = 'Tasks';
+    protected string $group = 'Tasks';
 
     /**
      * emplacement pour sauvegarder.

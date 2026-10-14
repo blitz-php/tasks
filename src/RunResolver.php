@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace BlitzPHP\Tasks;
 
-use BlitzPHP\Utilities\Date;
+use BlitzPHP\Utilities\DateTime\Date;
 
 /**
  * @credit <a href="https://tasks.codeigniter.com">CodeIgniter4 - CodeIgniter\Tasks\RunResolver</a>

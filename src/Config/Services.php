@@ -24,11 +24,11 @@ class Services extends BaseServices
      */
     public static function scheduler(bool $shared = true): Scheduler
     {
-        if (true === $shared && isset(static::$instances[Scheduler::class])) {
-            return static::$instances[Scheduler::class];
+        if ($shared) {
+            return static::sharedInstance('scheduler');
         }
 
-        return static::$instances[Scheduler::class] = new Scheduler();
+        return new Scheduler();
     }
 
     /**
@@ -36,10 +36,10 @@ class Services extends BaseServices
      */
     public static function cronExpression(bool $shared = true): CronExpression
     {
-        if (true === $shared && isset(static::$instances[CronExpression::class])) {
-            return static::$instances[CronExpression::class];
+        if ($shared) {
+            return static::sharedInstance('cronExpression');
         }
 
-        return static::$instances[CronExpression::class] = new CronExpression();
+        return new CronExpression();
     }
 }

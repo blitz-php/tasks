@@ -15,7 +15,7 @@ namespace BlitzPHP\Tasks\Commands;
 
 use BlitzPHP\Tasks\CronExpression;
 use BlitzPHP\Tasks\Scheduler;
-use BlitzPHP\Utilities\Date;
+use BlitzPHP\Utilities\DateTime\Date;
 
 /**
  * Répertorie les tâches actuellement planifiées.
@@ -25,19 +25,19 @@ class Lister extends TaskCommand
     /**
      * {@inheritDoc}
      */
-    protected $name = 'tasks:list';
+    protected string $name = 'tasks:list';
 
     /**
      * {@inheritDoc}
      */
-    protected $description = 'Répertorie les tâches actuellement configurées pour être exécutées.';
+    protected string $description = 'Répertorie les tâches actuellement configurées pour être exécutées.';
 
     /**
      * {@inheritDoc}
      *
      * @return void
      */
-    public function execute(array $params)
+    public function handle()
     {
         if (parametre('tasks.enabled') === false) {
             $this->writer->error('WARNING: L\'exécution de la tâche est actuellement désactivée.', true);

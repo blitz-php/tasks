@@ -17,6 +17,6 @@
 return [
     'base_url'      => 'http://localhost',
     'environment'   => 'testing',
-    'language'      => 'en',
+    'locale'        => 'en',
     'show_debugbar' => false,
 ];

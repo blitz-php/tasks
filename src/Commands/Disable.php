@@ -21,19 +21,19 @@ class Disable extends TaskCommand
     /**
      * {@inheritDoc}
      */
-    protected $name = 'tasks:disable';
+    protected string $name = 'tasks:disable';
 
     /**
      * {@inheritDoc}
      */
-    protected $description = 'Désactive l\'exécuteur de tâches.';
+    protected string $description = 'Désactive l\'exécuteur de tâches.';
 
     /**
      * {@inheritDoc}
      *
      * @return void
      */
-    public function execute(array $params)
+    public function handle()
     {
         parametre('tasks.enabled', false);
 
