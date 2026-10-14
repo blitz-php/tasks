@@ -118,26 +118,13 @@ class RunResolver
      */
     protected function increment(Date $next, string $position): Date
     {
-        switch ($position) {
-            case 'minute':
-                $next = $next->addMinutes(1);
-                break;
-
-            case 'hour':
-                $next = $next->addHours(1);
-                break;
-
-            case 'monthDay':
-            case 'weekDay':
-                $next = $next->addDays(1);
-                break;
-
-            case 'month':
-                $next = $next->addMonths(1);
-                break;
-        }
-
-        return $next;
+        return match ($position) {
+            'minute' => $next->addMinutes(1),
+            'hour'   => $next->addHours(1),
+            'monthDay', 'weekDay' => $next->addDays(1),
+            'month' => $next->addMonths(1),
+            default => $next,
+        };
     }
 
     /**
@@ -161,7 +148,7 @@ class RunResolver
     {
         $list = explode(',', $list);
 
-        return in_array(trim($value), $list, true);
+        return in_array(trim((string) $value), $list, true);
     }
 
     /**

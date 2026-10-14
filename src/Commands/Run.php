@@ -49,6 +49,8 @@ class Run extends TaskCommand
             $this->writer->error('WARNING: L\'exécution de la tâche est actuellement désactivée.', true);
             $this->writer->write("Pour réactiver les tâches, exécutez\u{a0}: `tasks:enable`", true);
             $this->newLine();
+
+            return EXIT_ERROR;
         }
 
         $this->task('Exécution de tâches...')->eol();
