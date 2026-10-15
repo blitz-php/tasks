@@ -21,8 +21,8 @@ define('ENVIRONMENT', 'testing');
 define('BLITZ_DEBUG', true);
 
 // Souvent, ces constantes sont prédéfinies, mais interroger la structure actuelle du répertoire comme un repli
-defined('HOME_PATH')     || define('HOME_PATH', realpath(rtrim(getcwd(), '\\/ ')) . DIRECTORY_SEPARATOR);
-defined('VENDOR_PATH')   || define('VENDOR_PATH', realpath(HOME_PATH . 'vendor') . DIRECTORY_SEPARATOR);
+defined('HOME_PATH')   || define('HOME_PATH', realpath(rtrim(getcwd(), '\\/ ')) . DIRECTORY_SEPARATOR);
+defined('VENDOR_PATH') || define('VENDOR_PATH', realpath(HOME_PATH . 'vendor') . DIRECTORY_SEPARATOR);
 
 if (! is_file($autoload_file = realpath(VENDOR_PATH . 'autoload.php')) ?: '') {
     echo 'Votre fichier autoload de Composer ne semble pas être défini correctement. ';
@@ -37,7 +37,7 @@ define('TEST_PATH', __DIR__ . '/');
 define('WEBROOT', APPLICATION_PATH);
 
 require_once $autoload_file;
-require_once SYST_PATH . 'Initializer' . DIRECTORY_SEPARATOR. 'Boot.php';
+require_once SYST_PATH . 'Initializer' . DIRECTORY_SEPARATOR . 'Boot.php';
 
 $paths = ['app' => APPLICATION_PATH, 'storage' => APPLICATION_PATH, 'test' => TEST_PATH, 'composer' => VENDOR_PATH];
 Boot::test($paths, __FILE__);

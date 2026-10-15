@@ -25,7 +25,7 @@ class Work extends TaskCommand
      * {@inheritDoc}
      */
     protected array $options = [
-        '--run-output-file' => 'Le fichier vers lequel diriger la sortie de `tasks:run`.',
+        '--run-output-file' => ['Le fichier vers lequel diriger la sortie de `tasks:run`.'],
     ];
 
     /**

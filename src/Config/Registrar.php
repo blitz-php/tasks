@@ -15,6 +15,8 @@ class Registrar
 {
     /**
      * Enregistre les fichiers de configurations publiable
+     *
+     * @return list<string>
      */
     public static function config(): array
     {

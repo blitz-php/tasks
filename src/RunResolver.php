@@ -61,13 +61,13 @@ class RunResolver
             foreach ($cron as $position => $value) {
                 $satisfied = false;
 
-                $format = match($position) {
+                $format = match ($position) {
                     'monthDay' => 'd',
                     'weekDay'  => 'c',
                     'minute'   => 'm',
                     'hour'     => 'H',
-                    'month'    => 'M'
-                }; 
+                    'month'    => 'M',
+                };
                 if ($position === 'weekDay') {
                     $value = $this->convertDOWToNumbers($value);
                 }

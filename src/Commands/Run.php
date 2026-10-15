@@ -30,7 +30,7 @@ class Run extends TaskCommand
      * {@inheritDoc}
      */
     protected array $options = [
-        '--task' => 'Exécuter une tâche spécifique par son alias.',
+        '--task' => ['Exécuter une tâche spécifique par son alias.'],
     ];
 
     /**
