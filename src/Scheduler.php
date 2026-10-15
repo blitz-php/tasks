@@ -93,7 +93,7 @@ class Scheduler
      *
      * @param class-string<Job>|Job $job
      */
-    public function job(object|string $job, ?string $queue = null, ?string $driver = null)
+    public function job(object|string $job, ?string $queue = null, ?string $driver = null): Task
     {
         return $this->call(function () use ($job, $queue, $driver) {
             /** @var Job $job */

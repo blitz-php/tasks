@@ -10,7 +10,7 @@
  */
 
 use BlitzPHP\Tasks\FrequenciesTrait;
-use BlitzPHP\Utilities\Date;
+use BlitzPHP\Utilities\DateTime\Date;
 
 use function Kahlan\expect;
 

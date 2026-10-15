@@ -18,11 +18,11 @@ use BlitzPHP\Cli\Console\Command;
  */
 final class TasksTest extends Command
 {
-    protected $group       = 'Testing';
-    protected $name        = 'tasks:test';
-    protected $description = 'Tests Tasks';
+    protected string $group       = 'Testing';
+    protected string $name        = 'tasks:test';
+    protected string $description = 'Tests Tasks';
 
-    public function execute(array $params)
+    public function handle()
     {
         $this->write('La commande peut produire du texte.');
     }

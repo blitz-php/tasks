@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace BlitzPHP\Tasks;
 
-use BlitzPHP\Utilities\Date;
+use BlitzPHP\Utilities\DateTime\Date;
 
 /**
  * Fournit les méthodes permettant d'attribuer des fréquences à des tâches individuelles.

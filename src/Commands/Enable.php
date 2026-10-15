@@ -21,19 +21,19 @@ class Enable extends TaskCommand
     /**
      * {@inheritDoc}
      */
-    protected $name = 'tasks:enable';
+    protected string $name = 'tasks:enable';
 
     /**
      * {@inheritDoc}
      */
-    protected $description = 'Active l\'exécuteur de tâches.';
+    protected string $description = 'Active l\'exécuteur de tâches.';
 
     /**
      * {@inheritDoc}
      *
      * @return void
      */
-    public function execute(array $params)
+    public function handle()
     {
         parametre('tasks.enabled', true);
 

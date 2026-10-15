@@ -15,7 +15,7 @@ namespace BlitzPHP\Tasks;
 
 use BlitzPHP\Contracts\Container\ContainerInterface;
 use BlitzPHP\Tasks\Exceptions\TasksException;
-use BlitzPHP\Utilities\Date;
+use BlitzPHP\Utilities\DateTime\Date;
 use InvalidArgumentException;
 use ReflectionException;
 use ReflectionFunction;

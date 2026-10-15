@@ -24,26 +24,26 @@ class Run extends TaskCommand
     /**
      * {@inheritDoc}
      */
-    protected $name = 'tasks:run';
+    protected string $name = 'tasks:run';
 
     /**
      * {@inheritDoc}
      */
-    protected $options = [
-        '--task' => 'Exécuter une tâche spécifique par son alias.',
+    protected array $options = [
+        '--task' => ['Exécuter une tâche spécifique par son alias.'],
     ];
 
     /**
      * {@inheritDoc}
      */
-    protected $description = 'Exécute des tâches en fonction de la planification, doit être configuré comme une tâche cron pour s\'exécuter toutes les minutes.';
+    protected string $description = 'Exécute des tâches en fonction de la planification, doit être configuré comme une tâche cron pour s\'exécuter toutes les minutes.';
 
     /**
      * {@inheritDoc}
      *
      * @return int
      */
-    public function execute(array $params)
+    public function handle()
     {
         if (parametre('tasks.enabled') === false) {
             $this->writer->error('WARNING: L\'exécution de la tâche est actuellement désactivée.', true);

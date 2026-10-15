@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace BlitzPHP\Tasks;
 
-use BlitzPHP\Utilities\Date;
+use BlitzPHP\Utilities\DateTime\Date;
 
 /**
  * @credit <a href="https://tasks.codeigniter.com">CodeIgniter4 - CodeIgniter\Tasks\RunResolver</a>
@@ -61,19 +61,17 @@ class RunResolver
             foreach ($cron as $position => $value) {
                 $satisfied = false;
 
-                // La méthode à utiliser sur l'instance Date
-                $method = 'get' . ucfirst($position);
-
-                // monthDay et weekDay nécessitent des méthodes personnalisées
-                if ($position === 'monthDay') {
-                    $method = 'getDay';
-                }
+                $format = match ($position) {
+                    'monthDay' => 'd',
+                    'weekDay'  => 'c',
+                    'minute'   => 'm',
+                    'hour'     => 'H',
+                    'month'    => 'M',
+                };
                 if ($position === 'weekDay') {
-                    $method = 'getDayOfWeek';
-
                     $value = $this->convertDOWToNumbers($value);
                 }
-                $nextValue = $next->{$method}();
+                $nextValue = $next->formatLocalized($format);
 
                 // S'il s'agit d'une valeur unique
                 if ($nextValue === $value) {
