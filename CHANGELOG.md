@@ -2,6 +2,15 @@
 
 Toutes les modifications notables apportées à `tasks` seront documentées dans ce fichier.
 
+## 1.2.0 - 2026-10-15
+
+<!-- Release notes generated using configuration in .github/release.yml at main -->
+### What's Changed
+
+* chore: passage a blitz-php 1.0.13 by @dimtrovich in https://github.com/blitz-php/tasks/pull/18
+
+**Full Changelog**: https://github.com/blitz-php/tasks/compare/1.1.0...1.2.0
+
 ## 1.1.0 - 2026-10-14
 
 <!-- Release notes generated using configuration in .github/release.yml at main -->
