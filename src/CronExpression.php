@@ -112,7 +112,7 @@ class CronExpression
      */
     public function lastRun(string $expression): Date
     {
-        return new Date();
+        return new Date(timezone: $this->timezone);
     }
 
     /**

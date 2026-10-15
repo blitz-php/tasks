@@ -45,6 +45,7 @@ Boot::test($paths, __FILE__);
 helper('path');
 
 config()->load('parametres', VENDOR_PATH . 'blitz-php/parametres/src/Config/parametres.php');
-config()->set('parametres.file.path', storage_path('.parametres.json'));
+config()->set('parametres.json.file', storage_path('.parametres.json'));
+config()->set('parametres.handlers', ['json']);
 config()->load('tasks', __DIR__ . '/../src/Config/tasks.php');
 config()->ghost('cache', ['handler' => 'file']);

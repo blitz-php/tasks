@@ -11,7 +11,7 @@
 
 use BlitzPHP\Tasks\Task;
 use BlitzPHP\Tasks\TaskLog;
-use BlitzPHP\Utilities\Date;
+use BlitzPHP\Utilities\DateTime\Date;
 
 use function Kahlan\expect;
 

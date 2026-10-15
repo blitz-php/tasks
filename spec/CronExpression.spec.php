@@ -11,7 +11,7 @@
 
 use BlitzPHP\Tasks\CronExpression;
 use BlitzPHP\Tasks\Exceptions\TasksException;
-use BlitzPHP\Utilities\Date;
+use BlitzPHP\Utilities\DateTime\Date;
 
 use function Kahlan\expect;
 

@@ -13,7 +13,7 @@ use BlitzPHP\Spec\CliOutputHelper as COH;
 use BlitzPHP\Spec\ReflectionHelper;
 use BlitzPHP\Tasks\Exceptions\TasksException;
 use BlitzPHP\Tasks\Task;
-use BlitzPHP\Utilities\Date;
+use BlitzPHP\Utilities\DateTime\Date;
 use BlitzPHP\Utilities\Helpers;
 
 use function Kahlan\expect;
@@ -134,8 +134,9 @@ describe('Task', function () {
         ]]);
 
         // Doit renvoyer l'heure actuelle
-        expect($task->lastRun())->toBeAnInstanceOf(Date::class); // @phpstan-ignore-line
-        expect($task->lastRun()->format('Y-m-d H:i:s'))->toBe($date);
+        $lastRun = $task->lastRun();
+        expect($lastRun)->toBeAnInstanceOf(Date::class); // @phpstan-ignore-line
+        expect($lastRun->format('Y-m-d H:i:s'))->toBe($date);
     });
 
     it('Execute une tache unique', function () {

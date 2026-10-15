@@ -23,8 +23,6 @@ describe('Task / Command', function () {
     });
 
     it('Publisher', function () {
-        config()->ghost('publisher')->set('publisher.restrictions', [ROOTPATH => '*']);
-
         $path = CONFIG_PATH . 'tasks.php';
 
         expect(file_exists($path))->toBeFalsy();
@@ -32,8 +30,7 @@ describe('Task / Command', function () {
         // conserver les fichiers originaux car a la fin, on suppimera tous les fichiers publiés
         $original_files = array_map(fn ($f) => $f->getRelativePathname(), service('fs')->files(CONFIG_PATH));
 
-        command('publish');
-        // command('publish --namespace=BlitzPHP\\\\Tasks');
+        command('config:publish tasks');
 
         expect(file_exists($path))->toBeTruthy();
 
